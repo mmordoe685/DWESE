@@ -1,0 +1,509 @@
+2025-11-05T13:10:11.179+01:00  INFO 7628 --- [main] [main] com.candyshop.main.MainApplication       : Starting MainApplication using Java 17.0.16 with PID 7628 (C:\DAW\candyshop\main\target\classes started by oiram in C:\DAW\candyshop\main)
+2025-11-05T13:10:11.189+01:00 DEBUG 7628 --- [main] [main] com.candyshop.main.MainApplication       : Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-05T13:10:11.194+01:00  INFO 7628 --- [main] [main] com.candyshop.main.MainApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-11-05T13:10:12.251+01:00  INFO 7628 --- [main] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-05T13:10:12.331+01:00  INFO 7628 --- [main] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 2 JPA repository interfaces.
+2025-11-05T13:10:13.147+01:00  INFO 7628 --- [main] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-05T13:10:13.161+01:00  INFO 7628 --- [main] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-05T13:10:13.162+01:00  INFO 7628 --- [main] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-11-05T13:10:13.261+01:00  INFO 7628 --- [main] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-05T13:10:13.262+01:00  INFO 7628 --- [main] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1984 ms
+2025-11-05T13:10:13.580+01:00  INFO 7628 --- [main] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-05T13:10:13.705+01:00  INFO 7628 --- [main] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-11-05T13:10:13.774+01:00  INFO 7628 --- [main] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-05T13:10:14.068+01:00  INFO 7628 --- [main] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-05T13:10:14.107+01:00  INFO 7628 --- [main] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-05T13:10:14.565+01:00  INFO 7628 --- [main] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@67fac095
+2025-11-05T13:10:14.569+01:00  INFO 7628 --- [main] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-05T13:10:14.640+01:00  WARN 7628 --- [main] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-05T13:10:15.845+01:00  INFO 7628 --- [main] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-05T13:10:15.848+01:00  INFO 7628 --- [main] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-05T13:10:16.171+01:00  INFO 7628 --- [main] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-05T13:10:16.359+01:00  WARN 7628 --- [main] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-05T13:10:16.520+01:00 TRACE 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 
+	c.c.m.a.ApiProductosCandyShop:
+	{DELETE [/api/productos/{productos_id}]}: deleteProducto(Long)
+	{GET [/api/productos]}: getALLProductos()
+	{POST [/api/productos/crear]}: createProducto(Productos)
+	{GET [/api/productos/{productos_id}]}: getProductoById(Long)
+	{PUT [/api/productos/{porductos_id}]}: updateProducto(Long,Productos)
+2025-11-05T13:10:16.530+01:00 TRACE 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 
+	c.c.m.a.ApiProveedoresCandyShop:
+	{POST [/api/proveedores/crear]}: createProveedor(Proveedor)
+	{GET [/api/proveedores]}: getlALLProveedor()
+	{DELETE [/api/proveedores/{proveedor_id}]}: deleteProducto(Long)
+	{GET [/api/proveedores/{proveedor_id}]}: getProductoById(Long)
+	{PUT [/api/proveedores/{proveedor_id}]}: updateProducto(Long,Proveedor)
+2025-11-05T13:10:16.533+01:00 TRACE 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 
+	c.c.m.c.mainController:
+	{GET [/ver-productos]}: verProductos(Model)
+	{GET [/ || ]}: mainPage(Model)
+	{GET [/ver-proveedor]}: verProveedores(Model)
+2025-11-05T13:10:16.538+01:00 TRACE 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 
+	c.c.m.c.productosController:
+	{POST [/productos/modificar]}: modifyCity(Productos,Model)
+	{GET [/productos/editar/{productos_id}]}: editProductos(Long,Model)
+	{POST [/productos/crear]}: createCity(Productos)
+	{GET [/productos/eliminar/{productos_id}]}: removeProduct(Long,RedirectAttributes)
+	{GET [/productos]}: listProducts(Model)
+	{GET [/productos/nuevo]}: newProveedor(Model)
+2025-11-05T13:10:16.544+01:00 TRACE 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 
+	c.c.m.c.proveedorController:
+	{GET [/proveedores]}: listProvedore(Model)
+	{POST [/proveedores/modificar]}: modifyCity(Proveedor,Model)
+	{GET [/proveedores/editar/{proveedor_id}]}: editCity(Long,Model)
+	{GET [/proveedores/eliminar/{proveedor_id}]}: removeCity(Long,RedirectAttributes)
+	{GET [/proveedores/ver/{proveedor_id}]}: verProveedorById(Long,Model)
+	{POST [/proveedores/crear]}: createCity(Proveedor)
+	{GET [/proveedores/nuevo]}: newProveedor(Model)
+	{GET [/proveedores/{proveedor_id}/productos]}: listarProductosPorProveedor(Long,Model)
+2025-11-05T13:10:16.552+01:00 TRACE 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+2025-11-05T13:10:16.557+01:00 DEBUG 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 29 mappings in 'requestMappingHandlerMapping'
+2025-11-05T13:10:16.692+01:00 DEBUG 7628 --- [main] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-11-05T13:10:16.746+01:00 DEBUG 7628 --- [main] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-11-05T13:10:16.808+01:00 DEBUG 7628 --- [main] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-11-05T13:10:17.144+01:00  INFO 7628 --- [main] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-11-05T13:10:17.153+01:00  INFO 7628 --- [main] [main] com.candyshop.main.MainApplication       : Started MainApplication in 6.453 seconds (process running for 7.152)
+2025-11-05T13:10:21.517+01:00  INFO 7628 --- [main] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-05T13:10:21.518+01:00  INFO 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-05T13:10:21.518+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-11-05T13:10:21.518+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-11-05T13:10:21.518+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-11-05T13:10:21.519+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@33997e07
+2025-11-05T13:10:21.519+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@2ecd2aa4
+2025-11-05T13:10:21.520+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-11-05T13:10:21.520+01:00  INFO 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-11-05T13:10:21.529+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/", parameters={}
+2025-11-05T13:10:21.539+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.candyshop.main.controller.mainController#mainPage(Model)
+2025-11-05T13:10:21.563+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7]
+2025-11-05T13:10:21.575+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] org.thymeleaf.TemplateEngine             : [THYMELEAF] INITIALIZING TEMPLATE ENGINE
+2025-11-05T13:10:21.715+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] org.thymeleaf.TemplateEngine.CONFIG      : Initializing Thymeleaf Template engine configuration...
+[THYMELEAF] TEMPLATE ENGINE CONFIGURATION:
+[THYMELEAF] * Thymeleaf version: 3.1.2.RELEASE (built 2023-07-30T19:25:50+0000)
+[THYMELEAF] * Cache Manager implementation: org.thymeleaf.cache.StandardCacheManager
+[THYMELEAF] * Template resolvers:
+[THYMELEAF]     * org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver
+[THYMELEAF] * Message resolvers:
+[THYMELEAF]     * org.thymeleaf.spring6.messageresolver.SpringMessageResolver
+[THYMELEAF] * Link builders:
+[THYMELEAF]     * org.thymeleaf.linkbuilder.StandardLinkBuilder
+[THYMELEAF] * Dialect: SpringStandard (org.thymeleaf.spring6.dialect.SpringStandardDialect)
+[THYMELEAF]     * Prefix: "th"
+[THYMELEAF]     * Processors for Template Mode: HTML
+[THYMELEAF]         * Element Tag Processors by [matching element and attribute name] [precedence]:
+[THYMELEAF]             * [* {th:include,data-th-include}] [100]: org.thymeleaf.standard.processor.StandardIncludeTagProcessor
+[THYMELEAF]             * [* {th:insert,data-th-insert}] [100]: org.thymeleaf.standard.processor.StandardInsertTagProcessor
+[THYMELEAF]             * [* {th:replace,data-th-replace}] [100]: org.thymeleaf.standard.processor.StandardReplaceTagProcessor
+[THYMELEAF]             * [* {th:each,data-th-each}] [200]: org.thymeleaf.standard.processor.StandardEachTagProcessor
+[THYMELEAF]             * [* {th:switch,data-th-switch}] [250]: org.thymeleaf.standard.processor.StandardSwitchTagProcessor
+[THYMELEAF]             * [* {th:case,data-th-case}] [275]: org.thymeleaf.standard.processor.StandardCaseTagProcessor
+[THYMELEAF]             * [* {th:if,data-th-if}] [300]: org.thymeleaf.standard.processor.StandardIfTagProcessor
+[THYMELEAF]             * [* {th:unless,data-th-unless}] [400]: org.thymeleaf.standard.processor.StandardUnlessTagProcessor
+[THYMELEAF]             * [* {th:object,data-th-object}] [500]: org.thymeleaf.spring6.processor.SpringObjectTagProcessor
+[THYMELEAF]             * [* {th:with,data-th-with}] [600]: org.thymeleaf.standard.processor.StandardWithTagProcessor
+[THYMELEAF]             * [* {th:attr,data-th-attr}] [700]: org.thymeleaf.standard.processor.StandardAttrTagProcessor
+[THYMELEAF]             * [* {th:attrprepend,data-th-attrprepend}] [800]: org.thymeleaf.standard.processor.StandardAttrprependTagProcessor
+[THYMELEAF]             * [* {th:attrappend,data-th-attrappend}] [900]: org.thymeleaf.standard.processor.StandardAttrappendTagProcessor
+[THYMELEAF]             * [* {th:method,data-th-method}] [990]: org.thymeleaf.spring6.processor.SpringMethodTagProcessor
+[THYMELEAF]             * [* {th:alt-title,data-th-alt-title}] [990]: org.thymeleaf.standard.processor.StandardAltTitleTagProcessor
+[THYMELEAF]             * [* {th:lang-xmllang,data-th-lang-xmllang}] [990]: org.thymeleaf.standard.processor.StandardLangXmlLangTagProcessor
+[THYMELEAF]             * [* {th:action,data-th-action}] [1000]: org.thymeleaf.spring6.processor.SpringActionTagProcessor
+[THYMELEAF]             * [* {th:href,data-th-href}] [1000]: org.thymeleaf.spring6.processor.SpringHrefTagProcessor
+[THYMELEAF]             * [* {th:src,data-th-src}] [1000]: org.thymeleaf.spring6.processor.SpringSrcTagProcessor
+[THYMELEAF]             * [* {th:hidden,data-th-hidden}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:multiple,data-th-multiple}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:disabled,data-th-disabled}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:open,data-th-open}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:declare,data-th-declare}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:pubdate,data-th-pubdate}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:nowrap,data-th-nowrap}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:reversed,data-th-reversed}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:scoped,data-th-scoped}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:ismap,data-th-ismap}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:autoplay,data-th-autoplay}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:formnovalidate,data-th-formnovalidate}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:autofocus,data-th-autofocus}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:loop,data-th-loop}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:seamless,data-th-seamless}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:novalidate,data-th-novalidate}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:required,data-th-required}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:defer,data-th-defer}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:checked,data-th-checked}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:selected,data-th-selected}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:readonly,data-th-readonly}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:controls,data-th-controls}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:default,data-th-default}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:async,data-th-async}] [1000]: org.thymeleaf.standard.processor.StandardConditionalFixedValueTagProcessor
+[THYMELEAF]             * [* {th:onmousemove,data-th-onmousemove}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onemptied,data-th-onemptied}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onselect,data-th-onselect}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onreset,data-th-onreset}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onplay,data-th-onplay}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onsubmit,data-th-onsubmit}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondurationchange,data-th-ondurationchange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onunload,data-th-onunload}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onkeypress,data-th-onkeypress}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onstorage,data-th-onstorage}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onformchange,data-th-onformchange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onratechange,data-th-onratechange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onchange,data-th-onchange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onloadstart,data-th-onloadstart}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onload,data-th-onload}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onvolumechange,data-th-onvolumechange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onredo,data-th-onredo}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onmousewheel,data-th-onmousewheel}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onreadystatechange,data-th-onreadystatechange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:oncontextmenu,data-th-oncontextmenu}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:oninvalid,data-th-oninvalid}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:oncanplaythrough,data-th-oncanplaythrough}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onmouseout,data-th-onmouseout}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onkeydown,data-th-onkeydown}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onerror,data-th-onerror}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:oninput,data-th-oninput}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onkeyup,data-th-onkeyup}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onseeked,data-th-onseeked}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onundo,data-th-onundo}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onwaiting,data-th-onwaiting}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onmessage,data-th-onmessage}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onblur,data-th-onblur}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ononline,data-th-ononline}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onprogress,data-th-onprogress}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onhashchange,data-th-onhashchange}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onsuspend,data-th-onsuspend}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onmouseover,data-th-onmouseover}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onabort,data-th-onabort}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onforminput,data-th-onforminput}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onresize,data-th-onresize}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onclick,data-th-onclick}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onloadedmetadata,data-th-onloadedmetadata}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondrop,data-th-ondrop}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onbeforeunload,data-th-onbeforeunload}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onseeking,data-th-onseeking}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onended,data-th-onended}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondragleave,data-th-ondragleave}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondragenter,data-th-ondragenter}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onfocus,data-th-onfocus}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onscroll,data-th-onscroll}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ontimeupdate,data-th-ontimeupdate}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onstalled,data-th-onstalled}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onshow,data-th-onshow}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onbeforeprint,data-th-onbeforeprint}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onmouseup,data-th-onmouseup}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:oncanplay,data-th-oncanplay}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onmousedown,data-th-onmousedown}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondragend,data-th-ondragend}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onpause,data-th-onpause}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onpopstate,data-th-onpopstate}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onoffline,data-th-onoffline}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondragover,data-th-ondragover}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onafterprint,data-th-onafterprint}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onplaying,data-th-onplaying}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondblclick,data-th-ondblclick}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:onloadeddata,data-th-onloadeddata}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondrag,data-th-ondrag}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:ondragstart,data-th-ondragstart}] [1000]: org.thymeleaf.standard.processor.StandardDOMEventAttributeTagProcessor
+[THYMELEAF]             * [* {th:inline,data-th-inline}] [1000]: org.thymeleaf.standard.processor.StandardInlineHTMLTagProcessor
+[THYMELEAF]             * [* {th:type,data-th-type}] [1000]: org.thymeleaf.standard.processor.StandardNonRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:name,data-th-name}] [1000]: org.thymeleaf.standard.processor.StandardNonRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:tabindex,data-th-tabindex}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:autocomplete,data-th-autocomplete}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:scrolling,data-th-scrolling}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:codebase,data-th-codebase}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:accept,data-th-accept}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:high,data-th-high}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:border,data-th-border}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:abbr,data-th-abbr}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:cols,data-th-cols}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:contenteditable,data-th-contenteditable}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:frameborder,data-th-frameborder}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:sizes,data-th-sizes}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:background,data-th-background}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:accesskey,data-th-accesskey}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:rel,data-th-rel}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:step,data-th-step}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:lang,data-th-lang}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:keytype,data-th-keytype}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:title,data-th-title}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:pattern,data-th-pattern}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:formtarget,data-th-formtarget}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:id,data-th-id}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:datetime,data-th-datetime}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:hreflang,data-th-hreflang}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:sandbox,data-th-sandbox}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:poster,data-th-poster}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:audio,data-th-audio}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:standby,data-th-standby}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:valuetype,data-th-valuetype}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:bgcolor,data-th-bgcolor}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:data,data-th-data}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:manifest,data-th-manifest}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:icon,data-th-icon}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:frame,data-th-frame}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:span,data-th-span}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:codetype,data-th-codetype}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:class,data-th-class}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:dir,data-th-dir}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:align,data-th-align}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:summary,data-th-summary}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:wrap,data-th-wrap}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:height,data-th-height}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:rev,data-th-rev}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:target,data-th-target}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:contextmenu,data-th-contextmenu}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:accept-charset,data-th-accept-charset}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:maxlength,data-th-maxlength}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:cite,data-th-cite}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:archive,data-th-archive}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:min,data-th-min}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:compact,data-th-compact}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:marginheight,data-th-marginheight}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:style,data-th-style}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:draggable,data-th-draggable}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:start,data-th-start}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:width,data-th-width}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:colspan,data-th-colspan}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:srclang,data-th-srclang}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:scope,data-th-scope}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:enctype,data-th-enctype}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:vspace,data-th-vspace}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:rules,data-th-rules}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:kind,data-th-kind}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:axis,data-th-axis}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:max,data-th-max}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:content,data-th-content}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:alt,data-th-alt}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:optimum,data-th-optimum}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:for,data-th-for}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:radiogroup,data-th-radiogroup}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:size,data-th-size}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:cellpadding,data-th-cellpadding}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:list,data-th-list}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:label,data-th-label}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:rowspan,data-th-rowspan}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:hspace,data-th-hspace}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:formmethod,data-th-formmethod}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:preload,data-th-preload}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:headers,data-th-headers}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:media,data-th-media}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:charset,data-th-charset}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:marginwidth,data-th-marginwidth}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:dropzone,data-th-dropzone}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:challenge,data-th-challenge}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:formenctype,data-th-formenctype}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:longdesc,data-th-longdesc}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:usemap,data-th-usemap}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:spellcheck,data-th-spellcheck}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:form,data-th-form}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:low,data-th-low}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:cellspacing,data-th-cellspacing}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:classid,data-th-classid}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:scheme,data-th-scheme}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:http-equiv,data-th-http-equiv}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:formaction,data-th-formaction}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:rows,data-th-rows}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:placeholder,data-th-placeholder}] [1000]: org.thymeleaf.standard.processor.StandardRemovableAttributeTagProcessor
+[THYMELEAF]             * [* {th:xmlbase,data-th-xmlbase}] [1000]: org.thymeleaf.standard.processor.StandardXmlBaseTagProcessor
+[THYMELEAF]             * [* {th:xmllang,data-th-xmllang}] [1000]: org.thymeleaf.standard.processor.StandardXmlLangTagProcessor
+[THYMELEAF]             * [* {xmlns:th}] [1000]: org.thymeleaf.standard.processor.StandardXmlNsTagProcessor
+[THYMELEAF]             * [* {th:xmlspace,data-th-xmlspace}] [1000]: org.thymeleaf.standard.processor.StandardXmlSpaceTagProcessor
+[THYMELEAF]             * [{option} *] [1005]: org.thymeleaf.spring6.processor.SpringOptionInSelectFieldTagProcessor
+[THYMELEAF]             * [* {th:value,data-th-value}] [1010]: org.thymeleaf.spring6.processor.SpringValueTagProcessor
+[THYMELEAF]             * [* {th:classappend,data-th-classappend}] [1100]: org.thymeleaf.standard.processor.StandardClassappendTagProcessor
+[THYMELEAF]             * [* {th:styleappend,data-th-styleappend}] [1100]: org.thymeleaf.standard.processor.StandardStyleappendTagProcessor
+[THYMELEAF]             * [* {th:text,data-th-text}] [1300]: org.thymeleaf.standard.processor.StandardTextTagProcessor
+[THYMELEAF]             * [* {th:utext,data-th-utext}] [1400]: org.thymeleaf.standard.processor.StandardUtextTagProcessor
+[THYMELEAF]             * [* {th:fragment,data-th-fragment}] [1500]: org.thymeleaf.standard.processor.StandardFragmentTagProcessor
+[THYMELEAF]             * [* {th:assert,data-th-assert}] [1550]: org.thymeleaf.standard.processor.StandardAssertTagProcessor
+[THYMELEAF]             * [* {th:remove,data-th-remove}] [1600]: org.thymeleaf.standard.processor.StandardRemoveTagProcessor
+[THYMELEAF]             * [* {th:errors,data-th-errors}] [1700]: org.thymeleaf.spring6.processor.SpringErrorsTagProcessor
+[THYMELEAF]             * [{input} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringInputCheckboxFieldTagProcessor
+[THYMELEAF]             * [{input} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringInputFileFieldTagProcessor
+[THYMELEAF]             * [{input} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringInputGeneralFieldTagProcessor
+[THYMELEAF]             * [{input} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringInputPasswordFieldTagProcessor
+[THYMELEAF]             * [{input} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringInputRadioFieldTagProcessor
+[THYMELEAF]             * [{option} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringOptionFieldTagProcessor
+[THYMELEAF]             * [{select} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringSelectFieldTagProcessor
+[THYMELEAF]             * [{textarea} {th:field,data-th-field}] [1700]: org.thymeleaf.spring6.processor.SpringTextareaFieldTagProcessor
+[THYMELEAF]             * [* {th:uerrors,data-th-uerrors}] [1700]: org.thymeleaf.spring6.processor.SpringUErrorsTagProcessor
+[THYMELEAF]             * [* {th:errorclass,data-th-errorclass}] [1800]: org.thymeleaf.spring6.processor.SpringErrorClassTagProcessor
+[THYMELEAF]             * [* {th:ref,data-th-ref}] [10000]: org.thymeleaf.standard.processor.StandardRefAttributeTagProcessor
+[THYMELEAF]             * [{th:block,th-block} *] [100000]: org.thymeleaf.standard.processor.StandardBlockTagProcessor
+[THYMELEAF]             * [* th:*] [2147483647]: org.thymeleaf.standard.processor.StandardDefaultAttributesTagProcessor
+[THYMELEAF]         * Text Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningTextProcessor
+[THYMELEAF]         * DOCTYPE Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardTranslationDocTypeProcessor
+[THYMELEAF]         * CDATA Section Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningCDATASectionProcessor
+[THYMELEAF]         * Comment Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningCommentProcessor
+[THYMELEAF]             * [1100]: org.thymeleaf.standard.processor.StandardConditionalCommentProcessor
+[THYMELEAF]     * Processors for Template Mode: XML
+[THYMELEAF]         * Element Tag Processors by [matching element and attribute name] [precedence]:
+[THYMELEAF]             * [* {th:include}] [100]: org.thymeleaf.standard.processor.StandardIncludeTagProcessor
+[THYMELEAF]             * [* {th:insert}] [100]: org.thymeleaf.standard.processor.StandardInsertTagProcessor
+[THYMELEAF]             * [* {th:replace}] [100]: org.thymeleaf.standard.processor.StandardReplaceTagProcessor
+[THYMELEAF]             * [* {th:each}] [200]: org.thymeleaf.standard.processor.StandardEachTagProcessor
+[THYMELEAF]             * [* {th:switch}] [250]: org.thymeleaf.standard.processor.StandardSwitchTagProcessor
+[THYMELEAF]             * [* {th:case}] [275]: org.thymeleaf.standard.processor.StandardCaseTagProcessor
+[THYMELEAF]             * [* {th:if}] [300]: org.thymeleaf.standard.processor.StandardIfTagProcessor
+[THYMELEAF]             * [* {th:unless}] [400]: org.thymeleaf.standard.processor.StandardUnlessTagProcessor
+[THYMELEAF]             * [* {th:object}] [500]: org.thymeleaf.standard.processor.StandardObjectTagProcessor
+[THYMELEAF]             * [* {th:with}] [600]: org.thymeleaf.standard.processor.StandardWithTagProcessor
+[THYMELEAF]             * [* {th:attr}] [700]: org.thymeleaf.standard.processor.StandardAttrTagProcessor
+[THYMELEAF]             * [* {th:attrprepend}] [800]: org.thymeleaf.standard.processor.StandardAttrprependTagProcessor
+[THYMELEAF]             * [* {th:attrappend}] [900]: org.thymeleaf.standard.processor.StandardAttrappendTagProcessor
+[THYMELEAF]             * [* {th:inline}] [1000]: org.thymeleaf.standard.processor.StandardInlineXMLTagProcessor
+[THYMELEAF]             * [* {xmlns:th}] [1000]: org.thymeleaf.standard.processor.StandardXmlNsTagProcessor
+[THYMELEAF]             * [* {th:text}] [1300]: org.thymeleaf.standard.processor.StandardTextTagProcessor
+[THYMELEAF]             * [* {th:utext}] [1400]: org.thymeleaf.standard.processor.StandardUtextTagProcessor
+[THYMELEAF]             * [* {th:fragment}] [1500]: org.thymeleaf.standard.processor.StandardFragmentTagProcessor
+[THYMELEAF]             * [* {th:assert}] [1550]: org.thymeleaf.standard.processor.StandardAssertTagProcessor
+[THYMELEAF]             * [* {th:remove}] [1600]: org.thymeleaf.standard.processor.StandardRemoveTagProcessor
+[THYMELEAF]             * [* {th:ref}] [10000]: org.thymeleaf.standard.processor.StandardRefAttributeTagProcessor
+[THYMELEAF]             * [{th:block} *] [100000]: org.thymeleaf.standard.processor.StandardBlockTagProcessor
+[THYMELEAF]             * [* th:*] [2147483647]: org.thymeleaf.standard.processor.StandardDefaultAttributesTagProcessor
+[THYMELEAF]         * Text Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningTextProcessor
+[THYMELEAF]         * CDATA Section Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningCDATASectionProcessor
+[THYMELEAF]         * Comment Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningCommentProcessor
+[THYMELEAF]     * Processors for Template Mode: TEXT
+[THYMELEAF]         * Element Tag Processors by [matching element and attribute name] [precedence]:
+[THYMELEAF]             * [* {th:insert}] [100]: org.thymeleaf.standard.processor.StandardInsertTagProcessor
+[THYMELEAF]             * [* {th:replace}] [100]: org.thymeleaf.standard.processor.StandardReplaceTagProcessor
+[THYMELEAF]             * [* {th:each}] [200]: org.thymeleaf.standard.processor.StandardEachTagProcessor
+[THYMELEAF]             * [* {th:switch}] [250]: org.thymeleaf.standard.processor.StandardSwitchTagProcessor
+[THYMELEAF]             * [* {th:case}] [275]: org.thymeleaf.standard.processor.StandardCaseTagProcessor
+[THYMELEAF]             * [* {th:if}] [300]: org.thymeleaf.standard.processor.StandardIfTagProcessor
+[THYMELEAF]             * [* {th:unless}] [400]: org.thymeleaf.standard.processor.StandardUnlessTagProcessor
+[THYMELEAF]             * [* {th:object}] [500]: org.thymeleaf.standard.processor.StandardObjectTagProcessor
+[THYMELEAF]             * [* {th:with}] [600]: org.thymeleaf.standard.processor.StandardWithTagProcessor
+[THYMELEAF]             * [* {th:inline}] [1000]: org.thymeleaf.standard.processor.StandardInlineTextualTagProcessor
+[THYMELEAF]             * [* {th:text}] [1300]: org.thymeleaf.standard.processor.StandardTextTagProcessor
+[THYMELEAF]             * [* {th:utext}] [1400]: org.thymeleaf.standard.processor.StandardUtextTagProcessor
+[THYMELEAF]             * [* {th:assert}] [1550]: org.thymeleaf.standard.processor.StandardAssertTagProcessor
+[THYMELEAF]             * [* {th:remove}] [1600]: org.thymeleaf.standard.processor.StandardRemoveTagProcessor
+[THYMELEAF]             * [{th:block} *] [100000]: org.thymeleaf.standard.processor.StandardBlockTagProcessor
+[THYMELEAF]             * [* 100000] [org.thymeleaf.standard.processor.StandardBlockTagProcessor]: {}
+[THYMELEAF]         * Text Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningTextProcessor
+[THYMELEAF]     * Processors for Template Mode: JAVASCRIPT
+[THYMELEAF]         * Element Tag Processors by [matching element and attribute name] [precedence]:
+[THYMELEAF]             * [* {th:insert}] [100]: org.thymeleaf.standard.processor.StandardInsertTagProcessor
+[THYMELEAF]             * [* {th:replace}] [100]: org.thymeleaf.standard.processor.StandardReplaceTagProcessor
+[THYMELEAF]             * [* {th:each}] [200]: org.thymeleaf.standard.processor.StandardEachTagProcessor
+[THYMELEAF]             * [* {th:switch}] [250]: org.thymeleaf.standard.processor.StandardSwitchTagProcessor
+[THYMELEAF]             * [* {th:case}] [275]: org.thymeleaf.standard.processor.StandardCaseTagProcessor
+[THYMELEAF]             * [* {th:if}] [300]: org.thymeleaf.standard.processor.StandardIfTagProcessor
+[THYMELEAF]             * [* {th:unless}] [400]: org.thymeleaf.standard.processor.StandardUnlessTagProcessor
+[THYMELEAF]             * [* {th:object}] [500]: org.thymeleaf.standard.processor.StandardObjectTagProcessor
+[THYMELEAF]             * [* {th:with}] [600]: org.thymeleaf.standard.processor.StandardWithTagProcessor
+[THYMELEAF]             * [* {th:inline}] [1000]: org.thymeleaf.standard.processor.StandardInlineTextualTagProcessor
+[THYMELEAF]             * [* {th:text}] [1300]: org.thymeleaf.standard.processor.StandardTextTagProcessor
+[THYMELEAF]             * [* {th:utext}] [1400]: org.thymeleaf.standard.processor.StandardUtextTagProcessor
+[THYMELEAF]             * [* {th:assert}] [1550]: org.thymeleaf.standard.processor.StandardAssertTagProcessor
+[THYMELEAF]             * [* {th:remove}] [1600]: org.thymeleaf.standard.processor.StandardRemoveTagProcessor
+[THYMELEAF]             * [{th:block} *] [100000]: org.thymeleaf.standard.processor.StandardBlockTagProcessor
+[THYMELEAF]             * [* 100000] [org.thymeleaf.standard.processor.StandardBlockTagProcessor]: {}
+[THYMELEAF]         * Text Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningTextProcessor
+[THYMELEAF]     * Processors for Template Mode: CSS
+[THYMELEAF]         * Element Tag Processors by [matching element and attribute name] [precedence]:
+[THYMELEAF]             * [* {th:insert}] [100]: org.thymeleaf.standard.processor.StandardInsertTagProcessor
+[THYMELEAF]             * [* {th:replace}] [100]: org.thymeleaf.standard.processor.StandardReplaceTagProcessor
+[THYMELEAF]             * [* {th:each}] [200]: org.thymeleaf.standard.processor.StandardEachTagProcessor
+[THYMELEAF]             * [* {th:switch}] [250]: org.thymeleaf.standard.processor.StandardSwitchTagProcessor
+[THYMELEAF]             * [* {th:case}] [275]: org.thymeleaf.standard.processor.StandardCaseTagProcessor
+[THYMELEAF]             * [* {th:if}] [300]: org.thymeleaf.standard.processor.StandardIfTagProcessor
+[THYMELEAF]             * [* {th:unless}] [400]: org.thymeleaf.standard.processor.StandardUnlessTagProcessor
+[THYMELEAF]             * [* {th:object}] [500]: org.thymeleaf.standard.processor.StandardObjectTagProcessor
+[THYMELEAF]             * [* {th:with}] [600]: org.thymeleaf.standard.processor.StandardWithTagProcessor
+[THYMELEAF]             * [* {th:inline}] [1000]: org.thymeleaf.standard.processor.StandardInlineTextualTagProcessor
+[THYMELEAF]             * [* {th:text}] [1300]: org.thymeleaf.standard.processor.StandardTextTagProcessor
+[THYMELEAF]             * [* {th:utext}] [1400]: org.thymeleaf.standard.processor.StandardUtextTagProcessor
+[THYMELEAF]             * [* {th:assert}] [1550]: org.thymeleaf.standard.processor.StandardAssertTagProcessor
+[THYMELEAF]             * [* {th:remove}] [1600]: org.thymeleaf.standard.processor.StandardRemoveTagProcessor
+[THYMELEAF]             * [* 100000] [org.thymeleaf.standard.processor.StandardBlockTagProcessor]: {}
+[THYMELEAF]             * [{th:block} *] [100000]: org.thymeleaf.standard.processor.StandardBlockTagProcessor
+[THYMELEAF]         * Text Processors by [precedence]:
+[THYMELEAF]             * [1000]: org.thymeleaf.standard.processor.StandardInliningTextProcessor
+[THYMELEAF]     * Expression Objects:
+[THYMELEAF]         * #ctx
+[THYMELEAF]         * #root
+[THYMELEAF]         * #vars
+[THYMELEAF]         * #object
+[THYMELEAF]         * #locale
+[THYMELEAF]         * #conversions
+[THYMELEAF]         * #uris
+[THYMELEAF]         * #temporals
+[THYMELEAF]         * #calendars
+[THYMELEAF]         * #dates
+[THYMELEAF]         * #bools
+[THYMELEAF]         * #numbers
+[THYMELEAF]         * #objects
+[THYMELEAF]         * #strings
+[THYMELEAF]         * #arrays
+[THYMELEAF]         * #lists
+[THYMELEAF]         * #sets
+[THYMELEAF]         * #maps
+[THYMELEAF]         * #aggregates
+[THYMELEAF]         * #messages
+[THYMELEAF]         * #ids
+[THYMELEAF]         * #execInfo
+[THYMELEAF]         * #request
+[THYMELEAF]         * #response
+[THYMELEAF]         * #session
+[THYMELEAF]         * #servletContext
+[THYMELEAF]         * #fields
+[THYMELEAF]         * #themes
+[THYMELEAF]         * #mvc
+[THYMELEAF]         * #requestdatavalues
+[THYMELEAF]     * Execution Attributes:
+[THYMELEAF]         * "StandardExpressionParser": Standard Expression Parser
+[THYMELEAF]         * "StandardJavaScriptSerializer": org.thymeleaf.standard.serializer.StandardJavaScriptSerializer@d70d1cd
+[THYMELEAF]         * "StandardCSSSerializer": org.thymeleaf.standard.serializer.StandardCSSSerializer@3cbdb308
+[THYMELEAF]         * "EnableSpringELCompiler": false
+[THYMELEAF]         * "StandardVariableExpressionEvaluator": SpringEL
+[THYMELEAF]         * "StandardConversionService": org.thymeleaf.spring6.expression.SpringStandardConversionService@554f5a1e
+[THYMELEAF] TEMPLATE ENGINE CONFIGURED OK
+2025-11-05T13:10:21.720+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] org.thymeleaf.TemplateEngine             : [THYMELEAF] TEMPLATE ENGINE INITIALIZED
+2025-11-05T13:10:21.847+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-05T13:10:21.869+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/logo1.png", parameters={}
+2025-11-05T13:10:21.875+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-11-05T13:10:21.880+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 304 NOT_MODIFIED
+2025-11-05T13:10:21.963+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/favicon.ico", parameters={}
+2025-11-05T13:10:21.964+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-11-05T13:10:21.965+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.w.s.r.ResourceHttpRequestHandler     : Resource not found
+2025-11-05T13:10:21.972+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico.]
+2025-11-05T13:10:21.973+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 404 NOT_FOUND
+2025-11-05T13:10:21.978+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : "ERROR" dispatch for GET "/error", parameters={}
+2025-11-05T13:10:21.980+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : 2 matching mappings: [{ [/error]}, { [/error], produces [text/html]}]
+2025-11-05T13:10:21.981+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController#error(HttpServletRequest)
+2025-11-05T13:10:22.000+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json;q=0.8', given [image/avif, image/webp, image/apng, image/svg+xml, image/*, */*;q=0.8] and supported [application/json, application/*+json]
+2025-11-05T13:10:22.003+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [{timestamp=Wed Nov 05 13:10:21 CET 2025, status=404, error=Not Found, trace=org.springframework.web. (truncated)...]
+2025-11-05T13:10:22.037+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Exiting from "ERROR" dispatch, status 404
+2025-11-05T13:10:26.977+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/productos", parameters={}
+2025-11-05T13:10:26.977+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.candyshop.main.controller.productosController#listProducts(Model)
+2025-11-05T13:10:27.116+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-4] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7]
+2025-11-05T13:10:27.152+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-05T13:10:30.680+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/proveedores", parameters={}
+2025-11-05T13:10:30.682+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.candyshop.main.controller.proveedorController#listProvedore(Model)
+2025-11-05T13:10:30.705+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-5] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7]
+2025-11-05T13:10:30.723+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-05T13:10:32.895+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/proveedores/1/productos", parameters={}
+2025-11-05T13:10:32.897+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.candyshop.main.controller.proveedorController#listarProductosPorProveedor(Long, Model)
+2025-11-05T13:10:32.964+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-6] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7]
+2025-11-05T13:10:32.974+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-05T13:10:36.640+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/proveedores", parameters={}
+2025-11-05T13:10:36.640+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.candyshop.main.controller.proveedorController#listProvedore(Model)
+2025-11-05T13:10:36.646+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-7] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7]
+2025-11-05T13:10:36.651+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-05T13:12:57.157+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/proveedores", parameters={}
+2025-11-05T13:12:57.157+01:00 TRACE 7628 --- [main] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.candyshop.main.controller.proveedorController#listProvedore(Model)
+2025-11-05T13:12:57.162+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-10] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7]
+2025-11-05T13:12:57.168+01:00 DEBUG 7628 --- [main] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
