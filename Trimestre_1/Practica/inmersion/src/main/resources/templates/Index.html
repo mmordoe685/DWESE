@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Buceo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+            padding-top: 70px; /* espacio para navbar fija */
+            background: linear-gradient(to bottom, #e0f7fa, #f0f8ff);
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 48, 73, 0.5), rgba(0, 48, 73, 0.5)),
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1650&q=80') no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 120px 20px;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+        }
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
+        }
+        .hero p {
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+        }
+        /* Navbar buttons */
+        .nav-link.btn {
+            transition: all 0.3s ease;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .nav-link.btn:hover {
+            background-color: #00bcd4;
+            border-color: #00bcd4;
+            color: #fff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.5);
+        }
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #004851, #007c91);
+            color: #ffffff;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">DiveConnect</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light mx-1" href="/usuarios/lista">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light mx-1" href="/cursos/lista">Cursos</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<main>
+    <section class="hero">
+        <div class="container">
+            <h1>Bienvenido a DiveConnect</h1>
+            <p>Gestiona tus cursos y usuarios de buceo de forma rápida y sencilla</p>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="text-center py-3 mt-auto">
+    &copy; 2025 DiveConnect. Todos los derechos reservados.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
