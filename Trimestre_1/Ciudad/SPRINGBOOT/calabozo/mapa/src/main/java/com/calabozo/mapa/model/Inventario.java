@@ -21,9 +21,6 @@ public class Inventario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private int capacidad;
-    private String apariencia;
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "personaje_id", referencedColumnName = "id")
     private Personaje personaje;
