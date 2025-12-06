@@ -1,0 +1,581 @@
+📚 Tutorial Completo de JpaRepository: Métodos y Funciones
+
+
+1. Introducción {#introducción}
+
+JpaRepository es la interfaz más completa de Spring Data JPA que proporciona funcionalidades CRUD completas y capacidades de paginación y ordenamiento.
+
+Configuración Base
+// Entidad de ejemplo
+@Entity
+public class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nombre;
+    private String email;
+    private Integer edad;
+    private Boolean activo;
+    private LocalDate fechaRegistro;
+    // getters y setters
+}
+
+// Repository
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    // Aquí añadiremos métodos personalizados
+}
+
+Jerarquía de Interfaces {#jerarquía}
+
+CrudRepository
+    ↑
+PagingAndSortingRepository
+    ↑
+JpaRepository
+
+3. Métodos Heredados 
+
+📦 De CrudRepository
+
+3.1 save(S entity)
+Guarda o actualiza una entidad.
+
+@Service
+public class UsuarioService {
+    @Autowired
+    private UsuarioRepository repository;
+    
+    public void ejemploSave() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan");
+        usuario.setEmail("juan@email.com");
+        
+        // Crear nuevo (INSERT)
+	//IMPORTANTE: La entidad devuelta tiene id y más campos de gestión, (fechac etc..) y esta abierta a modificaciones
+        Usuario guardado = repository.save(usuario);
+        
+        // Actualizar existente (UPDATE)
+        guardado.setNombre("Juan Carlos");
+        repository.save(guardado);
+    }
+}
+
+3.2 saveAll(Iterable<S> entities)
+Guarda múltiples entidades.
+public void ejemploSaveAll() {
+    List<Usuario> usuarios = Arrays.asList(
+        new Usuario("Ana", "ana@email.com"),
+        new Usuario("Luis", "luis@email.com"),
+        new Usuario("María", "maria@email.com")
+    );
+    
+    List<Usuario> guardados = repository.saveAll(usuarios);
+    System.out.println("Guardados: " + guardados.size() + " usuarios");
+}
+
+
+3.3 findById(ID id)
+Busca una entidad por su ID.
+
+public void ejemploFindById() {
+//Importante recalcar que Optional puede ser devuelto o no
+    Optional<Usuario> usuario = repository.findById(1L);
+    
+    // Manera moderna con Optional
+    usuario.ifPresent(u -> 
+        System.out.println("Usuario encontrado: " + u.getNombre())
+    );
+    
+    // O lanzar excepción si no existe
+    Usuario user = repository.findById(1L)
+        .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+}
+
+3.4 existsById(ID id)
+
+Verifica si existe una entidad con ese ID.
+
+public void ejemploExistsById() {
+    Long userId = 1L;
+    
+    if (repository.existsById(userId)) {
+        System.out.println("El usuario existe");
+    } else {
+        System.out.println("El usuario NO existe");
+    }
+}
+
+
+
+3.5 findAll()
+Obtiene todas las entidades.
+Java
+public void ejemploFindAll() {
+    List<Usuario> todosLosUsuarios = repository.findAll();
+    
+    // Iterar sobre todos
+    todosLosUsuarios.forEach(usuario -> 
+        System.out.println(usuario.getNombre())
+    );
+}
+
+3.6 findAllById(Iterable<ID> ids)
+Busca múltiples entidades por sus IDs.
+public void ejemploFindAllById() {
+    List<Long> ids = Arrays.asList(1L, 2L, 3L, 5L);
+    List<Usuario> usuarios = repository.findAllById(ids);
+    
+    System.out.println("Encontrados: " + usuarios.size());
+}
+
+3.7 count()
+Cuenta el total de entidades.
+
+public void ejemploCount() {
+    long totalUsuarios = repository.count();
+    System.out.println("Total de usuarios: " + totalUsuarios);
+}
+
+3.8 deleteById(ID id)
+Elimina una entidad por su ID.
+
+public void ejemploDeleteById() {
+    try {
+        repository.deleteById(1L);
+        System.out.println("Usuario eliminado");
+    } catch (EmptyResultDataAccessException e) {
+        System.out.println("Usuario no encontrado");
+    }
+}
+3.9 delete(T entity)
+Elimina una entidad específica.
+public void ejemploDelete() {
+    Usuario usuario = repository.findById(1L).orElse(null);
+    if (usuario != null) {
+        repository.delete(usuario);
+    }
+}
+
+3.10 deleteAllById(Iterable<ID> ids)
+Elimina múltiples entidades por IDs.
+
+public void ejemploDeleteAllById() {
+    List<Long> idsAEliminar = Arrays.asList(1L, 2L, 3L);
+    repository.deleteAllById(idsAEliminar);
+}
+
+Paginación y Ordenación de Resultados (PagingAndSortingRepository)
+
+3.11 findAll(Sort sort)
+Obtiene todas las entidades ordenadas.
+
+public void ejemploFindAllSort() {
+    // Ordenar por un campo ascendente
+     //Usamos el objeto especial Sort
+    Sort sortAsc = Sort.by("nombre").ascending();
+    List<Usuario> usuariosAsc = repository.findAll(sortAsc);
+    
+    // Ordenar por un campo descendente
+    Sort sortDesc = Sort.by("fechaRegistro").descending();
+    List<Usuario> usuariosDesc = repository.findAll(sortDesc);
+    
+    // Ordenar por múltiples campos
+    Sort sortMultiple = Sort.by(
+        Sort.Order.asc("edad"),
+        Sort.Order.desc("nombre")
+    );
+    List<Usuario> usuariosMultiple = repository.findAll(sortMultiple);
+}
+3.14 findAll(Pageable pageable)
+Obtiene entidades con paginación.
+public void ejemploFindAllPageable() {
+    // Primera página (0), 10 elementos por página
+    Pageable primeraPagina = PageRequest.of(5, 50);
+    Page<Usuario> pagina = repository.findAll(primeraPagina);
+    
+    System.out.println("Total elementos: " + pagina.getTotalElements());
+    System.out.println("Total páginas: " + pagina.getTotalPages());
+    System.out.println("Número actual: " + pagina.getNumber());
+    System.out.println("Elementos en página: " + pagina.getNumberOfElements());
+    
+    // Con ordenamiento
+    Pageable pageableConOrden = PageRequest.of(0, 10, Sort.by("nombre"));
+    Page<Usuario> paginaOrdenada = repository.findAll(pageableConOrden);
+}
+
+Métodos Específicos de JpaRepository
+
+3.15 flush()
+
+Sincroniza cambios pendientes con la base de datos.
+Java
+@Transactional
+public void ejemploFlush() {
+    Usuario usuario = new Usuario("Pedro", "pedro@email.com");
+    repository.save(usuario);
+    
+    // Fuerza la sincronización con la BD
+    repository.flush();
+    
+    // Los cambios ya están en la BD aunque la transacción no haya terminado
+}
+
+3.16 saveAndFlush(S entity)
+
+Guarda y sincroniza inmediatamente.
+
+public void ejemploSaveAndFlush() {
+    Usuario usuario = new Usuario("Carlos", "carlos@email.com");
+    
+    // Guarda y sincroniza en una operación
+    Usuario guardado = repository.saveAndFlush(usuario);
+    
+    // El ID ya está disponible inmediatamente
+    System.out.println("ID generado: " + guardado.getId());
+}
+
+4. Métodos Derivados (Query Methods) 
+
+4.1 Búsquedas Básicas
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // findBy - Búsqueda por campo exacto
+    Usuario findByEmail(String email);
+    List<Usuario> findByNombre(String nombre);
+    
+    // findFirstBy - Primer resultado
+    Usuario findFirstByNombre(String nombre);
+    
+    // findTopNBy - Primeros N resultados
+    List<Usuario> findTop3ByEdadGreaterThan(Integer edad);
+    
+    // existsBy - Verificar existencia
+    boolean existsByEmail(String email);
+    
+    // countBy - Contar resultados
+    long countByActivoTrue();
+    
+    // deleteBy - Eliminar por criterio
+    @Transactional
+    void deleteByEmail(String email);
+    
+    // removeBy - Sinónimo de deleteBy
+    @Transactional
+    List<Usuario> removeByActivoFalse();
+}
+
+4.2 Operadores de Comparación
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // Equals (implícito)
+    List<Usuario> findByNombre(String nombre);
+    
+    // Not Equals
+    List<Usuario> findByNombreNot(String nombre);
+    List<Usuario> findByNombreIsNot(String nombre);
+    
+    // Like (requiere % en el parámetro)
+    List<Usuario> findByNombreLike(String pattern); // "%Juan%"
+    
+    // NotLike
+    List<Usuario> findByNombreNotLike(String pattern);
+    
+    // StartingWith (agrega % al final)
+    List<Usuario> findByNombreStartingWith(String prefix); // "Juan"
+    List<Usuario> findByNombreStartsWith(String prefix);
+    
+    // EndingWith (agrega % al inicio)
+    List<Usuario> findByNombreEndingWith(String suffix);
+    List<Usuario> findByNombreEndsWith(String suffix);
+    
+    // Containing (agrega % antes y después)
+    List<Usuario> findByNombreContaining(String substring);
+    List<Usuario> findByNombreContains(String substring);
+    List<Usuario> findByNombreIsContaining(String substring);
+    
+    // NotContaining
+    List<Usuario> findByNombreNotContaining(String substring);
+    List<Usuario> findByNombreNotContains(String substring);
+}
+
+4.3 Comparaciones Numéricas y de Fecha
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // LessThan (<)
+    List<Usuario> findByEdadLessThan(Integer edad);
+    
+    // LessThanEqual (<=)
+    List<Usuario> findByEdadLessThanEqual(Integer edad);
+    
+    // GreaterThan (>)
+    List<Usuario> findByEdadGreaterThan(Integer edad);
+    
+    // GreaterThanEqual (>=)
+    List<Usuario> findByEdadGreaterThanEqual(Integer edad);
+    
+    // Between (inclusive)
+    List<Usuario> findByEdadBetween(Integer edadInicio, Integer edadFin);
+    
+    // Before (para fechas)
+    List<Usuario> findByFechaRegistroBefore(LocalDate fecha);
+    
+    // After (para fechas)
+    List<Usuario> findByFechaRegistroAfter(LocalDate fecha);
+    
+    // In
+    List<Usuario> findByEdadIn(List<Integer> edades);
+    List<Usuario> findByNombreIn(Collection<String> nombres);
+    
+    // NotIn
+    List<Usuario> findByEdadNotIn(List<Integer> edades);
+}
+
+
+
+4.4 Valores NULL y Boolean
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // IsNull
+    List<Usuario> findByEmailIsNull();
+    List<Usuario> findByEmailNull();
+    
+    // IsNotNull
+    List<Usuario> findByEmailIsNotNull();
+    List<Usuario> findByEmailNotNull();
+    
+    // True
+    List<Usuario> findByActivoTrue();
+    List<Usuario> findByActivoIsTrue();
+    
+    // False
+    List<Usuario> findByActivoFalse();
+    List<Usuario> findByActivoIsFalse();
+}
+
+4.5 Operadores Lógicos
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // AND
+    List<Usuario> findByNombreAndEmail(String nombre, String email);
+    List<Usuario> findByActivoTrueAndEdadGreaterThan(Integer edad);
+    
+    // OR
+    List<Usuario> findByNombreOrEmail(String nombre, String email);
+    List<Usuario> findByEdadLessThanOrActivoFalse(Integer edad);
+    
+    // Combinaciones complejas
+    List<Usuario> findByNombreAndEmailOrEdadGreaterThan(
+        String nombre, String email, Integer edad
+    );
+    // Esto se interpreta como: nombre AND (email OR edad > ?)
+}
+
+
+4.6 Ordenamiento en Métodos Derivados
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // OrderBy ascendente
+    List<Usuario> findByActivoTrueOrderByNombre();
+    List<Usuario> findByActivoTrueOrderByNombreAsc();
+    
+    // OrderBy descendente
+    List<Usuario> findByActivoTrueOrderByFechaRegistroDesc();
+    
+    // Múltiples ordenamientos
+    List<Usuario> findByActivoTrueOrderByEdadAscNombreDesc();
+    
+    // Con parámetro Sort
+    List<Usuario> findByActivo(Boolean activo, Sort sort);
+}
+
+4.7 Limitación de Resultados
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // First
+    Usuario findFirstByOrderByFechaRegistroDesc();
+    Optional<Usuario> findFirstByEmail(String email);
+    
+    // Top
+    Usuario findTopByOrderByEdadDesc();
+    List<Usuario> findTop10ByActivoTrue();
+    List<Usuario> findTop5ByActivoTrueOrderByFechaRegistroDesc();
+    
+    // Distinct
+    List<Usuario> findDistinctByNombre(String nombre);
+    List<Usuario> findDistinctByNombreOrEmail(String nombre, String email);
+}
+
+
+
+Métodos con @Query
+
+4.9 JPQL Queries(Portable para todas las BD)
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // JPQL básico
+    @Query("SELECT u FROM Usuario u WHERE u.email = ?1")
+    Usuario buscarPorEmail(String email);
+    
+    // Con parámetros nombrados
+    @Query("SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.edad > :edad")
+    List<Usuario> buscarPorNombreYEdad(@Param("nombre") String nombre, 
+                                        @Param("edad") Integer edad);
+    
+    
+    // Proyección
+    @Query("SELECT u.nombre, u.email FROM Usuario u WHERE u.activo = true")
+    List<Object[]> findNombresYEmailsActivos();
+    
+    // Con DTO
+    @Query("SELECT new com.example.dto.UsuarioDTO(u.nombre, u.email) " +
+           "FROM Usuario u WHERE u.activo = true")
+    List<UsuarioDTO> findUsuariosActivosDTO();
+}
+
+4.10 Native Queries(Escrito en el lenguaje de la BD) 
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    // Query SQL nativo
+    @Query(value = "SELECT * FROM usuarios WHERE email = ?1", nativeQuery = true)
+    Usuario findByEmailNative(String email);
+    
+    // Con paginación
+    @Query(value = "SELECT * FROM usuarios WHERE activo = true", 
+           nativeQuery = true)
+    Page<Usuario> findActivosNative(Pageable pageable);
+    
+    // Stored Procedure
+    @Query(value = "CALL calcular_edad_promedio()", nativeQuery = true)
+    Double calcularEdadPromedio();
+}
+
+4.11 Modificación con @Modifying
+
+Todas las querys de modificación llevan la anotación @modifying, y deben de llevar también @Transactional porque se ejecutan todas obligatoriamente dentro de una transacción al usar jpa, así se mantiene la integridad de los datos.
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    
+    @Modifying
+    @Transactional
+    @Query("UPDATE Usuario u SET u.activo = false WHERE u.fechaRegistro < :fecha")
+    int desactivarUsuariosAntiguos(@Param("fecha") LocalDate fecha);
+    
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Usuario u WHERE u.activo = false")
+    void eliminarInactivos();
+    
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("UPDATE Usuario u SET u.email = :nuevoEmail WHERE u.id = :id")
+    int actualizarEmail(@Param("id") Long id, @Param("nuevoEmail") String email);
+}
+}
+
+
+
+
+
+5. Ejemplos Prácticos Completos 
+📋 Ejemplo 1: Servicio CRUD Completo
+
+@Service
+@Transactional
+public class UsuarioService {
+    
+    @Autowired
+    private UsuarioRepository repository;
+    
+    // CREATE
+    public Usuario crearUsuario(UsuarioDTO dto) {
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new DuplicateException("Email ya existe");
+        }
+        
+        Usuario usuario = new Usuario();
+        usuario.setNombre(dto.getNombre());
+        usuario.setEmail(dto.getEmail());
+        usuario.setEdad(dto.getEdad());
+        usuario.setActivo(true);
+        usuario.setFechaRegistro(LocalDate.now());
+        
+        return repository.save(usuario);
+    }
+    
+    // READ
+    public Page<Usuario> listarUsuarios(int pagina, int tamaño, String ordenarPor) {
+        Pageable pageable = PageRequest.of(pagina, tamaño, Sort.by(ordenarPor));
+        return repository.findAll(pageable);
+    }
+    
+    public Usuario obtenerPorId(Long id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+    }
+    
+    // UPDATE
+    public Usuario actualizarUsuario(Long id, UsuarioDTO dto) {
+        Usuario usuario = obtenerPorId(id);
+        
+        usuario.setNombre(dto.getNombre());
+        usuario.setEdad(dto.getEdad());
+        
+        return repository.save(usuario);
+    }
+    
+    // DELETE
+    public void eliminarUsuario(Long id) {
+        if (!repository.existsById(id)) {
+            throw new NotFoundException("Usuario no encontrado");
+        }
+        repository.deleteById(id);
+    }
+    
+
+}
+
+Ejemplo 2: Búsquedas Avanzadas
+
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Long>,
+                                           JpaSpecificationExecutor<Usuario> {
+    
+    // Búsqueda con múltiples criterios
+    @Query("SELECT u FROM Usuario u WHERE " +
+           "(:nombre IS NULL OR u.nombre LIKE %:nombre%) AND " +
+           "(:email IS NULL OR u.email = :email) AND " +
+           "(:edadMin IS NULL OR u.edad >= :edadMin) AND " +
+           "(:edadMax IS NULL OR u.edad <= :edadMax) AND " +
+           "(:activo IS NULL OR u.activo = :activo)")
+    Page<Usuario> busquedaAvanzada(@Param("nombre") String nombre,
+                                   @Param("email") String email,
+                                   @Param("edadMin") Integer edadMin,
+                                   @Param("edadMax") Integer edadMax,
+                                   @Param("activo") Boolean activo,
+                                   Pageable pageable);
+    
+    // Estadísticas
+    @Query("SELECT new com.example.dto.EstadisticasDTO(" +
+           "COUNT(u), " +
+           "AVG(u.edad), " +
+           "MIN(u.edad), " +
+           "MAX(u.edad)) " +
+           "FROM Usuario u WHERE u.activo = true")
+    EstadisticasDTO obtenerEstadisticas();
+    
+    // Agrupación
+    @Query("SELECT u.edad, COUNT(u) FROM Usuario u " +
+           "GROUP BY u.edad ORDER BY u.edad")
+    List<Object[]> contarPorEdad();
+    
+    // Subquery
+    @Query("SELECT u FROM Usuario u WHERE u.edad > " +
+           "(SELECT AVG(u2.edad) FROM Usuario u2)")
+    List<Usuario> usuariosMayoresQuePromedio();
+}

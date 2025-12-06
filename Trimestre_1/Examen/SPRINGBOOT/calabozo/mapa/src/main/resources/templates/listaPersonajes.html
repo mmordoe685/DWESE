@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Personajes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+<div class="container">
+    <h1>Personajes</h1>
+
+    <div th:if="${mensaje}" class="alert alert-info" th:text="${mensaje}"></div>
+
+    <a th:href="@{/personajes/nuevo}" class="btn btn-success mb-3">Crear Personaje</a>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Clase</th>
+            <th>Nivel</th>
+            <th>Puntos de Vida</th>
+            <th>Ciudad</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${personajes}">
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.clase}"></td>
+            <td th:text="${p.nivel}"></td>
+            <td th:text="${p.puntosVida}"></td>
+            <td th:text="${p.puntosMana}"></td>
+            <td th:text="${p.ciudad != null ? p.ciudad.nombre : 'Sin ciudad'}"></td>
+            <td th:text="${p.estaVivo ? 'Vivo' : 'Muerto'}"></td>
+            <td>
+                <a th:href="@{/personajes/subir-nivel/{id}(id=${p.id})}" class="btn btn-primary btn-sm">Subir Nivel</a>
+                <a th:href="@{/personajes/curar/{id}(id=${p.id})}" class="btn btn-info btn-sm">Curar</a>
+                <a th:href="@{/personajes/matar/{id}(id=${p.id})}" class="btn btn-danger btn-sm">Matar</a>
+                <a th:href="@{/personajes/resucitar/{id}(id=${p.id})}" class="btn btn-success btn-sm">Resucitar</a>
+                <a th:href="@{/personajes/eliminar/{id}(id=${p.id})}" class="btn btn-warning btn-sm">Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

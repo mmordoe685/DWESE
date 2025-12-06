@@ -1,0 +1,343 @@
+Diferencia entre Controller y RestController
+
+@Controller: devuelve vistas (HTML). Los métodos retornan el nombre de la vista y usan Model para pasar datos.
+@RestController: devuelve datos (JSON, texto, bytes). Es @Controller + @ResponseBody por defecto.
+
+DTO de ejemplo (con validación)
+
+Este DTO lo usaremos en varios ejemplos para recibir/devolver JSON.
+
+// DTO para transferir datos de producto en la API.
+// Incluye validaciones a nivel de campos.
+package com.ejemplo.demo.api.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+public class ProductoDTO {
+
+    private Long id;
+
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
+
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor que 0")
+    private Double precio;
+
+    // Getters y setters (o usa Lombok @Data si lo prefieres)
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
+}
+
+RESTCONTROLLER Cómo RECIBIR datos
+
+Desde la URL: @PathVariable
+
+package com.ejemplo.demo.api;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/productos")
+public class ProductoRestController {
+
+    // GET /api/productos/123
+    @GetMapping("/{id}")
+    public String obtenerPorId(@PathVariable("id") Long id) {
+        // @PathVariable enlaza el segmento {id} de la URL al parámetro 'id'
+        return "Buscando producto con id=" + id;
+    }
+
+    // GET /api/productos/123/comentarios/456
+    @GetMapping("/{id}/comentarios/{comentarioId}")
+    public String obtenerComentario(
+            @PathVariable Long id,                // puede omitir el nombre si coincide
+            @PathVariable("comentarioId") Long comId) {
+        return "Producto=" + id + ", Comentario=" + comId;
+    }
+}
+
+3.2 Query string: @RequestParam
+
+@RestController
+@RequestMapping("/api/busqueda")
+class BusquedaController {
+
+
+    // GET /api/busqueda?texto=mouse&pagina=2&tamanio=20
+//También para POST normal con variables dentro del form
+    @GetMapping
+    public String buscar(
+       @RequestParam String texto, // obligatorio
+       @RequestParam(name = "pagina", defaultValue = "0") int page, // por defecto 0
+       @RequestParam(name = "tamanio", defaultValue = "10") int size  // por defecto 10
+    )
+ {
+        return "Buscando '" + texto + "' page=" + page + ", size=" + size;
+  }
+
+    // GET /api/busqueda/ids?ids=1&ids=2&ids=5
+    @GetMapping("/ids")
+    public String buscarPorIds(@RequestParam("ids") java.util.List<Long> ids) {
+        // Si repites el parámetro en la URL, Spring lo convierte a List automáticamente
+        return "IDs recibidos: " + ids;
+    }
+}
+
+3.3 Cabeceras HTTP: @RequestHeader 
+
+@RestController
+@RequestMapping("/api/headers")
+class HeaderController {
+
+    // GET /api/headers
+    // con cabecera: X-Request-Id: abc-123
+    @GetMapping
+    public String leerHeader(@RequestHeader("X-Request-Id") String requestId) {
+        // @RequestHeader mapea una cabecera HTTP a un parámetro
+        return "RequestId=" + requestId;
+    }
+
+    // Cabecera opcional con valor por defecto
+    @GetMapping("/opcional")
+    public String headerOpcional(
+@RequestHeader(name="X-Client", required=false, defaultValue = "web") String client)
+ {
+        return "Cliente=" + client;
+    }
+}
+
+3.4 Cookies: @CookieValue
+
+@RestController
+@RequestMapping("/api/cookies")
+class CookieController {
+
+    // Supón que el navegador envía cookie: sessionId=xyz
+    @GetMapping
+    public String leerCookie(@CookieValue(name = "sessionId", required = false) String sessionId) {
+        // @CookieValue permite leer cookies fácilmente
+        return "Cookie sessionId=" + sessionId;
+    }
+}
+
+3.5 Cuerpo (JSON): @RequestBody + validación (No formulario)
+
+import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/productos")
+class ProductoCommandController {
+
+    // POST /api/productos
+    // Content-Type: application/json
+    // Body: {"nombre":"Teclado","precio":99.9}
+    @PostMapping(consumes="application/json", produces="application/json")
+    public ResponseEntity<ProductoDTO> crear(@Valid @RequestBody ProductoDTO dto)                                                        
+{
+        // @RequestBody deserializa el JSON a ProductoDTO (Jackson)
+        // @Valid dispara validaciones jakarta.validation en el DTO
+
+        // Simula guardar y asignar ID
+        dto.setId(1L);
+
+        // Devuelve 201 Created + JSON del recurso creado
+        return ResponseEntity
+                .created(java.net.URI.create("/api/productos/" + dto.getId())) // Location header
+                .body(dto);
+    }
+
+    // PUT /api/productos/1
+    // Actualiza un producto existente
+    @PutMapping(path="/{id}",consumes="application/json",produces="application/json")
+public ResponseEntity<ProductoDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ProductoDTO dto) 
+{
+        // Aseguramos coherencia del id
+        dto.setId(id);
+        return ResponseEntity.ok(dto); // 200 OK con el objeto actualizado
+    }
+}
+
+3.6 Binding de formulario o query a objeto: @ModelAttribute
+
+Útil en @Controller (vistas) y también en @RestController cuando quieres armar un objeto desde query/form-data sin JSON.
+
+
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+class FiltroProducto {
+    // Campos que vendrán por query string o form-data (name=...&minPrecio=...)
+    private String name;
+    private Double minPrecio;
+    private Double maxPrecio;
+    // getters/setters...
+}
+
+@RestController
+@RequestMapping("/api/filtros")
+class FiltroController {
+
+    // GET /api/filtros?name=mouse&minPrecio=10&maxPrecio=100
+    @GetMapping
+    public String filtrar(@ModelAttribute FiltroProducto filtro) {
+        // @ModelAttribute llena el objeto con parámetros por nombre
+        return "Filtro -> name=" + filtro.getName() + ", min=" + filtro.getMinPrecio() + ", max=" + filtro.getMaxPrecio();
+    }
+}
+
+3.7 Subida de archivos: multipart/form-data
+
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/api/upload")
+class UploadController {
+
+    // POST /api/upload/simple
+    // Content-Type: multipart/form-data
+@PostMapping(path="/simple",consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+public String subirArchivo(@RequestParam("file") MultipartFile file) throws Exception {
+        // @RequestParam MultipartFile captura el archivo subido
+        return "Archivo: " + file.getOriginalFilename() + " (" + file.getSize() + " bytes)";
+    }
+
+// POST /api/upload/con-datos
+// Un JSON + un archivo en la misma petición
+@PostMapping(path="/con-datos",consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+   public String subirConDatos(
+            @RequestPart("file") MultipartFile file,       // parte del archivo
+            @RequestPart("producto") ProductoDTO dto       // parte JSON -> DTO
+    ) {
+        return "Subido " + file.getOriginalFilename() + " para producto " + dto.getNombre();
+    }
+}
+
+3.8 Paginación automática: Pageable y Sort
+
+Java
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+@RestController
+@RequestMapping("/api/paginado")
+class PaginacionController {
+
+    // GET /api/paginado?size=5&page=1&sort=precio,desc
+    @GetMapping
+    public Page<ProductoDTO> listar(Pageable pageable) {
+        // Spring convierte query params a Pageable automáticamente
+        // page: número de página (0-based), size: tamaño, sort: campo,dirección
+
+        // Simulamos una lista total
+        java.util.List<ProductoDTO> total = java.util.List.of(
+                nuevo(1L,"A",10.0), nuevo(2L,"B",20.0), nuevo(3L,"C",30.0)
+        );
+
+        // Esta es una demo, normalmente delegarías al repositorio y él devolvería Page
+        return new PageImpl<>(total, pageable, total.size());
+    }
+}
+
+
+
+
+
+
+
+
+Cómo DEVOLVER datos
+
+4.1 Texto o JSON directo (en RestController)
+
+@RestController
+@RequestMapping("/api/saludo")
+class SaludoController {
+
+    @GetMapping(produces = "text/plain")
+    public String textoPlano() {
+        // Se escribe tal cual en el body: text/plain
+        return "Hola!";
+    }
+
+    @GetMapping(path = "/json", produces = "application/json")
+    public ProductoDTO json() {
+        // Jackson serializa el objeto a JSON automáticamente
+        ProductoDTO dto = new ProductoDTO();
+        dto.setId(10L); dto.setNombre("Monitor"); dto.setPrecio(199.9);
+        return dto;
+    }
+}
+
+4.2 Control total con ResponseEntity (status + headers + body)
+
+import org.springframework.http.*;
+
+@RestController
+@RequestMapping("/api/respuestas")
+class RespuestaController {
+
+    @GetMapping("/ok")
+    public ResponseEntity<ProductoDTO> ok() {
+        ProductoDTO dto = new ProductoDTO();
+        dto.setId(1L); dto.setNombre("Mouse"); dto.setPrecio(25.0);
+
+        // 200 OK con header custom y body JSON
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CACHE_CONTROL, "no-store")
+                .body(dto);
+    }
+
+    @PostMapping("/creado")
+    public ResponseEntity<ProductoDTO> creado(@RequestBody ProductoDTO dto) {
+        dto.setId(99L);
+        // 201 Created + Location header + body
+        return ResponseEntity
+                .created(java.net.URI.create("/api/productos/" + dto.getId()))
+                .body(dto);
+    }
+
+    @DeleteMapping("/sin-contenido/{id}")
+    public ResponseEntity<Void> sinContenido(@PathVariable Long id) {
+        // 204 No Content (sin body)
+        return ResponseEntity.noContent().build();
+    }
+}
+
+
+4.5 Descarga de archivos (bytes/streams)
+
+Java
+
+import org.springframework.core.io.ByteArrayResource;
+
+@RestController
+@RequestMapping("/api/download")
+class DownloadController {
+
+    // GET /api/download/reporte
+    @GetMapping("/reporte")
+    public ResponseEntity<org.springframework.core.io.Resource> descargar() {
+        // Simula contenido binario (por ejemplo, un CSV/PDF)
+        byte[] contenido = "id,nombre,precio\n1,Teclado,99.9".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        ByteArrayResource recurso = new ByteArrayResource(contenido);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte.csv")
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .contentLength(contenido.length)
+                .body(recurso);
+    }
+}
+

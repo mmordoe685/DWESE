@@ -1,0 +1,1122 @@
+
+## 1. Player (Jugador) - Entidad Principal
+
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ENTIDAD PLAYER (JUGADOR)
+ * Representa al personaje principal del juego
+ * Demuestra relaciones: OneToOne, OneToMany, ManyToMany
+ */
+@Entity
+@Table(name = "players")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Player {
+    
+    // ============= CLAVE PRIMARIA =============
+    /**
+     * @Id: Indica que este campo es la clave primaria
+     * @GeneratedValue: JPA generará automáticamente el valor
+     * IDENTITY: Usa auto_increment de la base de datos
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    // ============= ATRIBUTOS BÁSICOS =============
+    /**
+     * @Column: Personaliza la columna en la base de datos
+     * nullable = false: Este campo es obligatorio (NOT NULL)
+     * unique = true: No puede haber dos jugadores con el mismo nombre
+     */
+    @Column(nullable = false, unique = true, length = 50)
+    private String nombre;
+    
+    @Column(nullable = false)
+    private Integer nivel = 1;
+    
+    @Column(nullable = false)
+    private Integer experiencia = 0;
+    
+    // ============= RELACIÓN ONE-TO-ONE (1:1) =============
+    /**
+     * RELACIÓN 1:1 CON INVENTORY
+     * Un jugador tiene UN ÚNICO inventario
+     * Un inventario pertenece a UN ÚNICO jugador
+     * 
+     * @OneToOne: Indica relación uno a uno
+     * cascade = CascadeType.ALL: Si guardamos/borramos Player, se guarda/borra Inventory
+     * orphanRemoval = true: Si quitamos el inventario del player, se elimina de BD
+     * mappedBy: Indica que Inventory es el dueño de la relación
+     */
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Inventory inventory;
+    
+    /**
+     * RELACIÓN 1:1 CON PLAYER_STATS
+     * Un jugador tiene UNAS ÚNICAS estadísticas
+     */
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PlayerStats stats;
+    
+    // ============= RELACIÓN MANY-TO-MANY (N:M) =============
+    /**
+     * RELACIÓN N:M CON SKILL
+     * Un jugador puede tener MÚLTIPLES habilidades
+     * Una habilidad puede ser aprendida por MÚLTIPLES jugadores
+     * 
+     * @ManyToMany: Indica relación muchos a muchos
+     * @JoinTable: Crea una tabla intermedia para la relación
+     *   - name: nombre de la tabla intermedia
+     *   - joinColumns: columna que referencia a esta entidad (Player)
+     *   - inverseJoinColumns: columna que referencia a la otra entidad (Skill)
+     * 
+     * TABLA RESULTANTE: player_skills
+     * Columnas: player_id, skill_id
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "player_skills",
+        joinColumns = @JoinColumn(name = "player_id"),
+        inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<Skill> habilidades = new HashSet<>();
+    
+    /**
+     * RELACIÓN N:M CON CITY
+     * Un jugador puede visitar MÚLTIPLES ciudades
+     * Una ciudad puede ser visitada por MÚLTIPLES jugadores
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "player_visited_cities",
+        joinColumns = @JoinColumn(name = "player_id"),
+        inverseJoinColumns = @JoinColumn(name = "city_id")
+    )
+    private Set<City> ciudadesVisitadas = new HashSet<>();
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    /**
+     * Método helper para añadir una habilidad
+     * Mantiene la sincronización bidireccional
+     */
+    public void addHabilidad(Skill skill) {
+        this.habilidades.add(skill);
+        skill.getPlayers().add(this);
+    }
+    
+    /**
+     * Método para subir de nivel
+     */
+    public void subirNivel() {
+        this.nivel++;
+        this.experiencia = 0;
+    }
+}
+```
+
+## 2. Inventory (Inventario)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ENTIDAD INVENTORY (INVENTARIO)
+ * Representa el inventario del jugador
+ * Demuestra: OneToOne (lado dueño), ManyToMany
+ */
+@Entity
+@Table(name = "inventories")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Inventory {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private Integer capacidadMaxima = 20;
+    
+    // ============= RELACIÓN ONE-TO-ONE (LADO DUEÑO) =============
+    /**
+     * LADO DUEÑO DE LA RELACIÓN 1:1 CON PLAYER
+     * Este lado contiene la clave foránea (player_id) en la tabla
+     * 
+     * @JoinColumn: Especifica la columna de la clave foránea
+     *   - name: nombre de la columna en esta tabla
+     *   - nullable = false: El inventario DEBE pertenecer a un jugador
+     */
+    @OneToOne
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
+    
+    // ============= RELACIÓN MANY-TO-MANY CON ITEMS =============
+    /**
+     * Un inventario puede contener MÚLTIPLES items
+     * Un item puede estar en MÚLTIPLES inventarios (de diferentes jugadores)
+     * 
+     * cascade = CascadeType.MERGE: Al actualizar inventario, actualiza items
+     * CascadeType.PERSIST: Al guardar inventario nuevo, guarda items nuevos
+     */
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+        name = "inventory_items",
+        joinColumns = @JoinColumn(name = "inventory_id"),
+        inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<Item> items = new HashSet<>();
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    public boolean addItem(Item item) {
+        if (items.size() < capacidadMaxima) {
+            return items.add(item);
+        }
+        return false; // Inventario lleno
+    }
+    
+    public boolean removeItem(Item item) {
+        return items.remove(item);
+    }
+}
+```
+
+## 3. PlayerStats (Estadísticas del Jugador)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * ENTIDAD PLAYER_STATS
+ * Estadísticas del jugador (HP, ataque, defensa, etc.)
+ * Ejemplo de OneToOne (lado dueño) separando datos en otra tabla
+ */
+@Entity
+@Table(name = "player_stats")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PlayerStats {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private Integer puntosVida = 100;
+    
+    @Column(nullable = false)
+    private Integer puntosVidaMaximos = 100;
+    
+    @Column(nullable = false)
+    private Integer ataque = 10;
+    
+    @Column(nullable = false)
+    private Integer defensa = 5;
+    
+    @Column(nullable = false)
+    private Integer agilidad = 5;
+    
+    @Column(nullable = false)
+    private Integer inteligencia = 5;
+    
+    // ============= RELACIÓN ONE-TO-ONE =============
+    @OneToOne
+    @JoinColumn(name = "player_id", unique = true, nullable = false)
+    private Player player;
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    public void recibirDanio(Integer danio) {
+        this.puntosVida = Math.max(0, this.puntosVida - danio);
+    }
+    
+    public void curar(Integer cantidad) {
+        this.puntosVida = Math.min(this.puntosVidaMaximos, this.puntosVida + cantidad);
+    }
+}
+```
+
+## 4. City (Ciudad)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * ENTIDAD CITY (CIUDAD)
+ * Representa una ciudad en el mapa del juego
+ * Demuestra: OneToMany, ManyToMany
+ */
+@Entity
+@Table(name = "cities")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class City {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, unique = true)
+    private String nombre;
+    
+    @Column(length = 500)
+    private String descripcion;
+    
+    // Coordenadas en el mapa
+    @Column(nullable = false)
+    private Integer coordenadaX;
+    
+    @Column(nullable = false)
+    private Integer coordenadaY;
+    
+    // ============= RELACIÓN ONE-TO-MANY (1:N) =============
+    /**
+     * RELACIÓN 1:N CON DUNGEON
+     * Una ciudad puede tener MÚLTIPLES calabozos
+     * Un calabozo pertenece a UNA ÚNICA ciudad
+     * 
+     * @OneToMany: Indica que esta es la parte "uno" de la relación
+     * mappedBy = "city": Indica que Dungeon tiene un campo "city" 
+     *                     que es el dueño de la relación
+     * cascade = CascadeType.ALL: Operaciones en City se propagan a Dungeons
+     * orphanRemoval = true: Si quitamos un dungeon de la lista, se elimina de BD
+     * 
+     * IMPORTANTE: El lado OneToMany NO es el dueño de la relación
+     */
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dungeon> calabozos = new ArrayList<>();
+    
+    // ============= RELACIÓN MANY-TO-MANY (LADO INVERSO) =============
+    /**
+     * Lado inverso de la relación con Player
+     * mappedBy indica que Player es el dueño de la relación
+     */
+    @ManyToMany(mappedBy = "ciudadesVisitadas")
+    private Set<Player> visitantes = new HashSet<>();
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    /**
+     * Método helper para añadir calabozo
+     * Mantiene sincronización bidireccional
+     */
+    public void addCalabozo(Dungeon dungeon) {
+        calabozos.add(dungeon);
+        dungeon.setCity(this);
+    }
+    
+    public void removeCalabozo(Dungeon dungeon) {
+        calabozos.remove(dungeon);
+        dungeon.setCity(null);
+    }
+}
+```
+
+## 5. Dungeon (Calabozo)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * ENTIDAD DUNGEON (CALABOZO)
+ * Representa un calabozo tipo Zelda
+ * Demuestra: ManyToOne, OneToMany, OneToOne
+ */
+@Entity
+@Table(name = "dungeons")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Dungeon {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    @Column(length = 500)
+    private String descripcion;
+    
+    @Column(nullable = false)
+    private Integer nivelRecomendado;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DificultadEnum dificultad;
+    
+    // ============= RELACIÓN MANY-TO-ONE (N:1) =============
+    /**
+     * RELACIÓN N:1 CON CITY (LADO DUEÑO)
+     * Muchos calabozos pueden estar en UNA ciudad
+     * 
+     * @ManyToOne: Este es el lado "muchos" y el DUEÑO de la relación
+     * @JoinColumn: Define la clave foránea en esta tabla (dungeons)
+     * 
+     * RESULTADO: Columna "city_id" en tabla "dungeons"
+     * 
+     * REGLA: El lado ManyToOne SIEMPRE es el dueño de la relación
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", nullable = false)
+    private City city;
+    
+    // ============= RELACIÓN ONE-TO-MANY =============
+    /**
+     * Un calabozo tiene MÚLTIPLES niveles/pisos
+     * Los niveles están ordenados (nivel 1, 2, 3...)
+     */
+    @OneToMany(mappedBy = "dungeon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("numeroNivel ASC")
+    private List<Level> niveles = new ArrayList<>();
+    
+    // ============= RELACIÓN ONE-TO-ONE =============
+    /**
+     * Un calabozo tiene UN ÚNICO jefe final
+     * El jefe final pertenece a UN calabozo
+     */
+    @OneToOne(mappedBy = "dungeon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Boss jefeFinal;
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    public void addNivel(Level nivel) {
+        niveles.add(nivel);
+        nivel.setDungeon(this);
+    }
+}
+
+/**
+ * ENUM para la dificultad
+ * @Enumerated(EnumType.STRING): Guarda el nombre del enum en BD
+ * @Enumerated(EnumType.ORDINAL): Guarda el número de posición (0,1,2...)
+ * STRING es más legible y recomendado
+ */
+enum DificultadEnum {
+    FACIL,
+    NORMAL,
+    DIFICIL,
+    EXTREMO
+}
+```
+
+## 6. Level (Nivel/Piso del Calabozo)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * ENTIDAD LEVEL (NIVEL/PISO)
+ * Representa un piso dentro del calabozo
+ * Demuestra: ManyToOne, OneToMany
+ */
+@Entity
+@Table(name = "levels")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Level {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private Integer numeroNivel; // 1, 2, 3, etc.
+    
+    @Column(length = 500)
+    private String descripcion;
+    
+    // ============= RELACIÓN MANY-TO-ONE =============
+    /**
+     * Muchos niveles pertenecen a UN calabozo
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dungeon_id", nullable = false)
+    private Dungeon dungeon;
+    
+    // ============= RELACIÓN ONE-TO-MANY =============
+    /**
+     * Un nivel tiene MÚLTIPLES habitaciones/salas
+     */
+    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Room> habitaciones = new ArrayList<>();
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    public void addHabitacion(Room room) {
+        habitaciones.add(room);
+        room.setLevel(this);
+    }
+}
+```
+
+## 7. Room (Habitación/Sala)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * ENTIDAD ROOM (HABITACIÓN)
+ * Representa una sala dentro de un nivel
+ * Puede contener monstruos, puzzles o tesoros
+ */
+@Entity
+@Table(name = "rooms")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Room {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoRoomEnum tipo;
+    
+    @Column(nullable = false)
+    private Integer posicionX;
+    
+    @Column(nullable = false)
+    private Integer posicionY;
+    
+    private Boolean completada = false;
+    
+    // ============= RELACIÓN MANY-TO-ONE =============
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_id", nullable = false)
+    private Level level;
+    
+    // ============= RELACIÓN ONE-TO-MANY =============
+    /**
+     * Una habitación puede tener MÚLTIPLES puzzles
+     */
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Puzzle> puzzles = new ArrayList<>();
+    
+    // ============= RELACIÓN MANY-TO-MANY =============
+    /**
+     * RELACIÓN N:M CON MONSTER
+     * Una habitación puede tener MÚLTIPLES monstruos
+     * Un monstruo puede aparecer en MÚLTIPLES habitaciones
+     * 
+     * Esto permite reutilizar la misma "plantilla" de monstruo
+     * en diferentes lugares del juego
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "room_monsters",
+        joinColumns = @JoinColumn(name = "room_id"),
+        inverseJoinColumns = @JoinColumn(name = "monster_id")
+    )
+    private Set<Monster> monstruos = new HashSet<>();
+    
+    // ============= MÉTODOS DE UTILIDAD =============
+    public void addMonstruo(Monster monster) {
+        this.monstruos.add(monster);
+        monster.getRooms().add(this);
+    }
+    
+    public void addPuzzle(Puzzle puzzle) {
+        this.puzzles.add(puzzle);
+        puzzle.setRoom(this);
+    }
+}
+
+enum TipoRoomEnum {
+    COMBATE,     // Habitación con monstruos
+    PUZZLE,      // Habitación con acertijos
+    TESORO,      // Habitación con cofre
+    DESCANSO,    // Punto de guardado/curación
+    JEFE         // Habitación del jefe final
+}
+```
+
+## 8. Monster (Monstruo)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ENTIDAD MONSTER (MONSTRUO)
+ * Representa un tipo de monstruo en el juego
+ * Esta es la "plantilla" del monstruo que puede aparecer en varias habitaciones
+ */
+@Entity
+@Table(name = "monsters")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Monster {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    @Column(length = 500)
+    private String descripcion;
+    
+    @Column(nullable = false)
+    private Integer nivel;
+    
+    @Column(nullable = false)
+    private Integer puntosVida;
+    
+    @Column(nullable = false)
+    private Integer ataque;
+    
+    @Column(nullable = false)
+    private Integer defensa;
+    
+    @Column(nullable = false)
+    private Integer experienciaOtorgada;
+    
+    @Enumerated(EnumType.STRING)
+    private TipoMonstruoEnum tipo;
+    
+    // ============= RELACIÓN MANY-TO-MANY (LADO INVERSO) =============
+    /**
+     * Lado inverso de la relación con Room
+     * mappedBy indica que Room es el dueño de la relación
+     */
+    @ManyToMany(mappedBy = "monstruos")
+    private Set<Room> rooms = new HashSet<>();
+    
+    // ============= RELACIÓN MANY-TO-MANY CON ITEMS (BOTÍN) =============
+    /**
+     * Un monstruo puede soltar MÚLTIPLES items
+     * Un item puede ser soltado por MÚLTIPLES monstruos
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "monster_loot",
+        joinColumns = @JoinColumn(name = "monster_id"),
+        inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<Item> botin = new HashSet<>();
+}
+
+enum TipoMonstruoEnum {
+    COMUN,
+    ELITE,
+    MINIBOSS
+}
+```
+
+## 9. Boss (Jefe Final)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ENTIDAD BOSS (JEFE FINAL)
+ * Representa al jefe final de un calabozo
+ * Estadísticas más poderosas que un monstruo normal
+ */
+@Entity
+@Table(name = "bosses")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Boss {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, unique = true)
+    private String nombre;
+    
+    @Column(length = 1000)
+    private String historia;
+    
+    @Column(nullable = false)
+    private Integer puntosVida;
+    
+    @Column(nullable = false)
+    private Integer ataque;
+    
+    @Column(nullable = false)
+    private Integer defensa;
+    
+    @Column(nullable = false)
+    private Integer experienciaOtorgada;
+    
+    // ============= RELACIÓN ONE-TO-ONE (LADO DUEÑO) =============
+    /**
+     * Un jefe pertenece a UN calabozo
+     * Este es el lado dueño de la relación
+     */
+    @OneToOne
+    @JoinColumn(name = "dungeon_id", unique = true, nullable = false)
+    private Dungeon dungeon;
+    
+    // ============= RELACIÓN MANY-TO-MANY =============
+    /**
+     * Recompensas especiales por derrotar al jefe
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "boss_rewards",
+        joinColumns = @JoinColumn(name = "boss_id"),
+        inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<Item> recompensas = new HashSet<>();
+    
+    /**
+     * Habilidades especiales del jefe
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "boss_abilities",
+        joinColumns = @JoinColumn(name = "boss_id"),
+        inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<Skill> habilidadesEspeciales = new HashSet<>();
+}
+```
+
+## 10. Puzzle (Acertijo)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * ENTIDAD PUZZLE (ACERTIJO)
+ * Representa un puzzle en una habitación
+ * Demuestra: ManyToOne, OneToOne
+ */
+@Entity
+@Table(name = "puzzles")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Puzzle {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    @Column(length = 1000, nullable = false)
+    private String descripcion;
+    
+    @Column(length = 500)
+    private String pista;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoPuzzleEnum tipo;
+    
+    @Column(nullable = false)
+    private Integer dificultad; // 1-10
+    
+    private Boolean resuelto = false;
+    
+    // ============= RELACIÓN MANY-TO-ONE =============
+    /**
+     * Muchos puzzles pueden estar en UNA habitación
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+    
+    // ============= RELACIÓN ONE-TO-ONE =============
+    /**
+     * Un puzzle puede otorgar UN item como recompensa
+     * 
+     * @JoinColumn aquí hace que Puzzle sea el dueño
+     * La columna item_reward_id estará en la tabla puzzles
+     */
+    @OneToOne
+    @JoinColumn(name = "item_reward_id")
+    private Item recompensa;
+}
+
+enum TipoPuzzleEnum {
+    BLOQUES,
+    PALANCAS,
+    ANTORCHAS,
+    ROMPECABEZAS,
+    SECUENCIA,
+    LOGICA
+}
+```
+
+## 11. Item (Objeto/Equipo)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ENTIDAD ITEM (OBJETO/EQUIPO)
+ * Representa items, armas, armaduras, pociones, etc.
+ * Participa en múltiples relaciones ManyToMany
+ */
+@Entity
+@Table(name = "items")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Item {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    @Column(length = 500)
+    private String descripcion;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoItemEnum tipo;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RarezaEnum rareza;
+    
+    // Atributos según el tipo de item
+    private Integer bonusAtaque;
+    private Integer bonusDefensa;
+    private Integer bonusVida;
+    private Integer valorCuracion;
+    
+    @Column(nullable = false)
+    private Integer valor; // Precio de compra/venta
+    
+    // ============= RELACIONES MANY-TO-MANY (LADO INVERSO) =============
+    /**
+     * Todas estas son relaciones donde Item NO es el dueño
+     * Solo declaramos el lado inverso con mappedBy
+     */
+    
+    @ManyToMany(mappedBy = "items")
+    private Set<Inventory> inventarios = new HashSet<>();
+    
+    @ManyToMany(mappedBy = "botin")
+    private Set<Monster> monstruosQueSueltan = new HashSet<>();
+    
+    @ManyToMany(mappedBy = "recompensas")
+    private Set<Boss> bosses = new HashSet<>();
+}
+
+enum TipoItemEnum {
+    ARMA,
+    ARMADURA,
+    ACCESORIO,
+    POCION,
+    INGREDIENTE,
+    LLAVE,
+    TESORO
+}
+
+enum RarezaEnum {
+    COMUN,
+    POCO_COMUN,
+    RARO,
+    EPICO,
+    LEGENDARIO
+}
+```
+
+## 12. Skill (Habilidad)
+
+```java
+package com.ejemplo.dungeongame.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ENTIDAD SKILL (HABILIDAD)
+ * Representa habilidades que pueden aprender jugadores o usar jefes
+ * Demuestra: ManyToMany (lado inverso)
+ */
+@Entity
+@Table(name = "skills")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Skill {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, unique = true)
+    private String nombre;
+    
+    @Column(length = 500)
+    private String descripcion;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoSkillEnum tipo;
+    
+    @Column(nullable = false)
+    private Integer nivelRequerido; // Nivel necesario para aprender
+    
+    @Column(nullable = false)
+    private Integer costeMana;
+    
+    @Column(nullable = false)
+    private Integer potencia;
+    
+    @Column(nullable = false)
+    private Integer tiempoRecarga; // En turnos
+    
+    // ============= RELACIONES MANY-TO-MANY (LADO INVERSO) =============
+    
+    /**
+     * Jugadores que tienen esta habilidad
+     */
+    @ManyToMany(mappedBy = "habilidades")
+    private Set<Player> players = new HashSet<>();
+    
+    /**
+     * Jefes que usan esta habilidad
+     */
+    @ManyToMany(mappedBy = "habilidadesEspeciales")
+    private Set<Boss> bosses = new HashSet<>();
+}
+
+enum TipoSkillEnum {
+    ATAQUE_FISICO,
+    ATAQUE_MAGICO,
+    CURACION,
+    BUFF,        // Mejora estadísticas
+    DEBUFF,      // Reduce estadísticas del enemigo
+    DEFENSA
+}
+```
+
+## 13. Archivo de Configuración application.properties
+
+```properties
+# ===================================
+# CONFIGURACIÓN DE BASE DE DATOS
+# ===================================
+
+# Usar H2 para desarrollo (base de datos en memoria)
+spring.datasource.url=jdbc:h2:mem:dungeongame
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# O usar MySQL para producción (descomentar estas líneas)
+# spring.datasource.url=jdbc:mysql://localhost:3306/dungeongame?createDatabaseIfNotExist=true
+# spring.datasource.username=root
+# spring.datasource.password=tu_password
+# spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# ===================================
+# CONFIGURACIÓN DE JPA/HIBERNATE
+# ===================================
+
+# create: Crea las tablas cada vez (BORRA DATOS)
+# update: Actualiza las tablas sin borrar datos
+# validate: Solo valida que las tablas coincidan con las entidades
+# create-drop: Crea al iniciar y borra al cerrar
+spring.jpa.hibernate.ddl-auto=create-drop
+
+# Mostrar SQL en consola (útil para aprender)
+spring.jpa.show-sql=true
+
+# Formatear el SQL para que sea legible
+spring.jpa.properties.hibernate.format_sql=true
+
+# Mostrar los parámetros de las consultas
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+# Dialecto (descomentar según tu BD)
+# spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
+
+# ===================================
+# CONSOLA H2 (solo para desarrollo)
+# ===================================
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+```
+
+## 14. Diagrama de Relaciones
+
+```
+RESUMEN DE RELACIONES:
+
+┌─────────────────────────────────────────────────────────┐
+│                    TIPOS DE RELACIONES                   │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ONE-TO-ONE (1:1) - Bidireccional:                      │
+│  ├─ Player ←→ Inventory                                 │
+│  ├─ Player ←→ PlayerStats                               │
+│  └─ Dungeon ←→ Boss                                     │
+│                                                          │
+│  ONE-TO-ONE (1:1) - Unidireccional:                     │
+│  └─ Puzzle → Item (recompensa)                          │
+│                                                          │
+│  ONE-TO-MANY / MANY-TO-ONE (1:N):                       │
+│  ├─ City (1) ←→ (N) Dungeon                            │
+│  ├─ Dungeon (1) ←→ (N) Level                           │
+│  ├─ Level (1) ←→ (N) Room                              │
+│  └─ Room (1) ←→ (N) Puzzle                             │
+│                                                          │
+│  MANY-TO-MANY (N:M):                                    │
+│  ├─ Player ←→ Skill                                     │
+│  ├─ Player ←→ City (visitadas)                          │
+│  ├─ Inventory ←→ Item                                   │
+│  ├─ Room ←→ Monster                                     │
+│  ├─ Monster ←→ Item (botín)                             │
+│  ├─ Boss ←→ Item (recompensas)                          │
+│  └─ Boss ←→ Skill (habilidades)                         │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+## 15. Conceptos Clave para Explicar a los Alumnos
+
+```java
+/**
+ * ============================================
+ *  CONCEPTOS FUNDAMENTALES DE JPA
+ * ============================================
+ * 
+ * 1. ENTIDAD (@Entity):
+ *    - Representa una tabla en la base de datos
+ *    - Cada instancia es una fila en la tabla
+ * 
+ * 2. CLAVE PRIMARIA (@Id):
+ *    - Identificador único de cada registro
+ *    - Obligatorio en toda entidad
+ * 
+ * 3. LADO DUEÑO DE LA RELACIÓN:
+ *    - Es quien tiene la clave foránea en su tabla
+ *    - En @OneToOne y @ManyToMany: el que tiene @JoinColumn o @JoinTable
+ *    - En @OneToMany/@ManyToOne: siempre es el lado @ManyToOne
+ * 
+ * 4. MAPPEDBY:
+ *    - Se usa en el lado NO dueño de la relación
+ *    - Indica el nombre del campo en la otra entidad
+ *    - Evita crear columnas duplicadas
+ * 
+ * 5. CASCADE:
+ *    - PERSIST: Al guardar A, guarda B
+ *    - MERGE: Al actualizar A, actualiza B
+ *    - REMOVE: Al borrar A, borra B
+ *    - ALL: Todas las anteriores
+ * 
+ * 6. FETCH:
+ *    - LAZY (perezoso): Carga los datos relacionados solo cuando se acceden
+ *    - EAGER (ansioso): Carga todo inmediatamente
+ *    - Recomendado: LAZY para evitar cargar demasiados datos
+ * 
+ * 7. ORPHAN REMOVAL:
+ *    - Si se quita un hijo de la colección del padre, se elimina de BD
+ *    - Solo tiene sentido en @OneToOne y @OneToMany
+ * 
+ * 8. TABLAS INTERMEDIAS (@JoinTable):
+ *    - Necesarias en relaciones @ManyToMany
+ *    - Contienen las claves foráneas de ambas tablas
+ * 
+ * ============================================
+ */
+```
+
+Esta estructura completa cubre todos los tipos de relaciones JPA y proporciona ejemplos claros y comentados para tus alumnos. ¿Quieres que añada repositorios, servicios o controladores para completar la aplicación?

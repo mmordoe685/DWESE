@@ -1,0 +1,246 @@
+Guía Completa de Anotaciones y Relaciones en JPA
+
+I. Anotaciones Esenciales (Lo Mínimo Requerido)
+
+Estas son las anotaciones fundamentales para que una clase sea reconocida como una entidad de base de datos.
+
+@Entity	
+Obligatoria. Marca la clase como una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos.
+@Table	
+Opcional. Especifica los detalles de la tabla a la que se mapea la entidad. Si se omite, el nombre de la tabla será el mismo que el de la clase (insensible a mayúsculas/minúsculas).
+@Id	
+Obligatoria. Marca un campo como la clave primaria (Primary Key) de la entidad.
+Java
+
+@Entity // 1. Esta clase es una entidad
+@Table(name = "productos", schema = "ventas") // 2. Se mapea a la tabla 'productos' en el esquema 'ventas'
+public class Producto {
+    
+    @Id // 3. El campo 'id' es la clave primaria
+    private Long id;
+    
+    // ... otros campos
+}
+
+II. Anotaciones de Mapeo Básico (Campos y Columnas)
+
+Controlan cómo los campos de tu clase se mapean a las columnas de la tabla.
+
+@Column	
+Opcional. Especifica los detalles de la columna a la que se mapea un campo.	
+name, nullable, unique, length, precision, scale, columnDefinition
+@Basic	
+Opcional. Es la anotación por defecto para tipos simples (String, int, Date). Se puede usar para especificar el tipo de fetch.	optional, fetch (EAGER/LAZY)
+
+@Transient	
+
+Indica que un campo NO debe ser persistido en la base de datos. Es para datos temporales o calculados.	-
+@Enumerated	
+Mapea un tipo Enum.	EnumType.ORDINAL (entero, frágil), EnumType.STRING (cadena, recomendado)
+@Temporal	
+Para mapear tipos de fecha/hora (java.util.Date, java.util.Calendar). (Legado, se prefiere java.time.*)	TemporalType.DATE, TemporalType.TIME, TemporalType.TIMESTAMP
+@Lob	
+Marca un campo para ser mapeado como un Objeto Grande (Large Object), como BLOB (binario) o CLOB (texto).	-
+
+
+@Entity
+public class Producto {
+    @Id
+    private Long id;
+
+    @Column(name = "nombre_producto", nullable = false, length = 100, unique = true)
+    private String nombre;
+
+    @Lob // Para textos largos
+    @Column(columnDefinition = "TEXT")
+    private String descripcionDetallada;
+
+    @Column(precision = 10, scale = 2) // Ej: 12345678.90
+    private BigDecimal precio;
+    
+    @Enumerated(EnumType.STRING) // Guarda "DISPONIBLE", "AGOTADO", etc.
+    private EstadoProducto estado;
+    
+    @Transient // Este campo no se guarda en la BD
+    private double precioConIVA;
+}
+
+
+
+III. Anotaciones de Clave Primaria (Generación de IDs)
+
+Controlan cómo se genera el valor de la clave primaria.
+
+@GeneratedValue	
+Configura la estrategia de generación para la clave primaria. Se usa junto a @Id.	IDENTITY, SEQUENCE, TABLE, AUTO
+Estrategias de Generación:
+IDENTITY:
+
+Cómo funciona: Delega la generación del ID a la base de datos (ej. AUTO_INCREMENT en MySQL, SERIAL en PostgreSQL).
+Ideal para: MySQL, PostgreSQL, SQL Server.
+Ejemplo: @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+SEQUENCE:
+
+Cómo funciona: Usa una secuencia de base de datos para generar IDs. Más eficiente para inserciones en lote.
+Ideal para: Oracle, PostgreSQL.
+Ejemplo: @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mi_secuencia")
+@SequenceGenerator(name = "mi_secuencia", sequenceName = "producto_seq", allocationSize = 1)
+
+TABLE:
+
+Cómo funciona: Simula una secuencia usando una tabla separada. Es la más lenta y menos recomendada.
+Ideal para: Bases de datos que no soportan secuencias.
+
+AUTO (Por defecto):
+
+Cómo funciona: JPA elige la estrategia más apropiada según el dialecto de la base de datos.
+
+
+
+
+
+IV. Anotaciones de Relaciones (El Corazón de JPA)
+
+Definen cómo se relacionan las entidades entre sí.
+
+Atributos Clave en las Relaciones:
+cascade: 
+Define qué operaciones (persist, merge, remove, etc.) se propagan de la entidad padre a la hija.
+CascadeType.ALL: Propaga todas las operaciones. ¡Cuidado con REMOVE!
+CascadeType.PERSIST: Al guardar el padre, se guarda el hijo.
+CascadeType.MERGE: Al actualizar el padre, se actualiza el hijo.
+
+fetch: 
+Define cuándo se cargan los datos de la relación.
+FetchType.EAGER: Carga la relación inmediatamente junto con la entidad principal.
+FetchType.LAZY: Carga la relación solo cuando se accede a ella por primera vez. (Recomendado para colecciones).
+
+mappedBy: Se usa en el lado inverso (no dueño) de una relación para indicar qué campo en la entidad dueña gestiona la relación.
+
+optional: Indica si la relación es obligatoria (false) o no (true).
+
+1. @ManyToOne (Muchos a Uno)
+
+Concepto: Muchos Productos pertenecen a una Categoría.
+Lado Dueño: El lado "Muchos" (Producto). Contiene la clave foránea (categoria_id).
+Java
+// Entidad Dueña (Producto)
+@Entity
+public class Producto {
+    @Id
+    private Long id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id", nullable = false) // Columna de clave foránea
+    private Categoria categoria;
+}
+2. @OneToMany (Uno a Muchos)
+
+Concepto: Una Categoria tiene muchos Productos.
+Descripción: Es el lado inverso de @ManyToOne. Siempre usa mappedBy.
+
+// Entidad Inversa (Categoria)
+@Entity
+public class Categoria {
+    @Id
+    private Long id;
+    
+    // "mappedBy" apunta al campo 'categoria' en la clase Producto
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Producto> productos = new ArrayList<>();
+}
+
+
+3. @OneToOne (Uno a Uno)
+
+Concepto: Un Usuario tiene un PerfilDeUsuario.
+Lado Dueño: La entidad que contiene la clave foránea. Puede ser cualquiera de las dos.
+Java
+
+// Entidad Dueña (Usuario)
+@Entity
+public class Usuario {
+    @Id
+    private Long id;
+    
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "perfil_id", referencedColumnName = "id")
+    private PerfilDeUsuario perfil;
+}
+
+// Entidad Inversa (PerfilDeUsuario)
+@Entity
+public class PerfilDeUsuario {
+    @Id
+    private Long id;
+    
+    @OneToOne(mappedBy = "perfil")
+    private Usuario usuario;
+}
+
+4. @ManyToMany (Muchos a Muchos)
+
+Concepto: Un Estudiante puede estar en muchos Cursos, y un Curso puede tener muchos Estudiantes.
+Implementación: Siempre requiere una tabla intermedia (tabla de unión).
+Anotación Clave: @JoinTable.
+Java
+
+// Lado Dueño (Estudiante)
+@Entity
+public class Estudiante {
+    @Id
+    private Long id;
+    
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+        name = "estudiante_curso", // Nombre de la tabla intermedia
+        joinColumns = @JoinColumn(name = "estudiante_id"), // Clave foránea de esta entidad
+        inverseJoinColumns = @JoinColumn(name = "curso_id") // Clave foránea de la otra entidad
+    )
+    private Set<Curso> cursos = new HashSet<>();
+}
+
+// Lado Inverso (Curso)
+@Entity
+public class Curso {
+    @Id
+    private Long id;
+    
+    @ManyToMany(mappedBy = "cursos")
+    private Set<Estudiante> estudiantes = new HashSet<>();
+}
+
+Tipos de Datos, correspondencia Java-Mysql en entidades jpa
+
+Tipo en Java (Entidad)
+Tipo en MySQL (Generado)
+Anotación JPA (Si es necesaria)
+Long o Integer
+BIGINT o INT
+@Id, @GeneratedValue
+String
+VARCHAR(255)
+@Column(length=...) para cambiar tamaño
+String (texto largo)
+TEXT o LONGTEXT
+@Lob o @Column(columnDefinition="TEXT")
+BigDecimal
+DECIMAL(precision, scale)
+@Column(precision=19, scale=2)
+LocalDate
+DATE
+(Ninguna)
+LocalDateTime
+DATETIME(6)
+(Ninguna)
+Boolean
+BIT(1) o TINYINT(1)
+(Ninguna)
+byte[]
+BLOB o LONGBLOB
+@Lob
+Enum
+VARCHAR
+@Enumerated(EnumType.STRING) (Recomendado)
+

@@ -1,0 +1,26 @@
+<h2>Personajes de la ciudad: <span th:text="${ciudad}"></span></h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Clase</th>
+            <th>Nivel</th>
+            <th>Puntos de Vida</th>
+            <th>Puntos de Mana</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="p : ${personajes}">
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.clase}"></td>
+            <td th:text="${p.nivel}"></td>
+            <td th:text="${p.puntosVida}"></td>
+            <td th:text="${p.puntosMana}"></td>
+            <td th:text="${p.estaVivo ? 'Vivo' : 'Muerto'}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/ciudades}" class="btn btn-secondary">Volver</a>

@@ -1,0 +1,260 @@
+Perfecto. Vamos a rehacer **todos los archivos necesarios** para que tu CRUD de personajes funcione correctamente y puedas crear personajes asociados a una ciudad sin errores. Te daré las versiones completas listas para copiar y pegar.
+
+---
+
+## 1️⃣ `Personaje.java` (Entidad)
+
+```java
+package com.calabozo.mapa.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Data
+public class Personaje {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(nullable = false)
+    private String nombre;
+
+    private String clase;
+
+    @Column(nullable = false)
+    private int nivel;
+
+    private int puntosVida;
+
+    private int puntosMana;
+
+    private LocalDateTime fechaCreacion = LocalDateTime.now();
+
+    private boolean estaVivo;
+
+    @ManyToOne
+    @JoinColumn(name = "ciudad_id")
+    private Ciudad ciudad;
+
+    // Relación con Inventario (opcional)
+    @OneToOne(mappedBy = "personaje")
+    private Inventario inventario;
+}
+```
+
+---
+
+## 2️⃣ `PersonajeRepository.java`
+
+```java
+package com.calabozo.mapa.repository;
+
+import com.calabozo.mapa.model.Personaje;
+import com.calabozo.mapa.model.Ciudad;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface PersonajeRepository extends JpaRepository<Personaje, Long> {
+
+    List<Personaje> findByClase(String clase);
+
+    List<Personaje> findByEstaVivoTrue();
+
+    List<Personaje> findByCiudadAndClase(Ciudad ciudad, String clase);
+
+    long countByNivelGreaterThan(int nivel);
+
+    List<Personaje> findTop3ByOrderByNivelDesc();
+}
+```
+
+---
+
+## 3️⃣ `PersonajeController.java`
+
+```java
+package com.calabozo.mapa.controller;
+
+import com.calabozo.mapa.model.Ciudad;
+import com.calabozo.mapa.model.Personaje;
+import com.calabozo.mapa.repository.PersonajeRepository;
+import com.calabozo.mapa.repository.CiudadRepository;
+import com.calabozo.mapa.service.PersonajeService;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+
+@Controller
+@Slf4j
+@RequestMapping("/personajes")
+public class PersonajeController {
+
+    @Autowired
+    private PersonajeRepository personajeRepository;
+
+    @Autowired
+    private CiudadRepository ciudadRepository;
+
+    @Autowired
+    private PersonajeService personajeService;
+
+    // LISTAR PERSONAJES
+    @GetMapping
+    public String listarPersonajes(Model model, @ModelAttribute("mensaje") String mensaje) {
+        List<Personaje> personajes = personajeRepository.findAll();
+        model.addAttribute("personajes", personajes);
+        model.addAttribute("mensaje", mensaje);
+        return "listaPersonajes";
+    }
+
+    // FORMULARIO NUEVO
+    @GetMapping("/nuevo")
+    public String nuevoPersonaje(Model model) {
+        model.addAttribute("personaje", new Personaje());
+        model.addAttribute("ciudades", ciudadRepository.findAll());
+        return "nuevoPersonaje";
+    }
+
+    // CREAR PERSONAJE
+    @PostMapping("/crear")
+    public String crearPersonaje(@ModelAttribute Personaje personaje, RedirectAttributes ra) {
+
+        // Validaciones básicas
+        if (personaje.getNombre() == null || personaje.getNombre().isBlank()) {
+            ra.addFlashAttribute("mensaje", "Error: El nombre no puede estar vacío");
+            return "redirect:/personajes/nuevo";
+        }
+
+        if (personaje.getNivel() < 1) personaje.setNivel(1);
+        if (personaje.getNivel() > 100) personaje.setNivel(100);
+
+        // Guardar personaje en BD
+        personajeRepository.save(personaje);
+
+        ra.addFlashAttribute("mensaje", "Personaje creado correctamente");
+        log.info("Personaje creado: {}", personaje.getNombre());
+        return "redirect:/personajes";
+    }
+
+    // ELIMINAR PERSONAJE
+    @GetMapping("/eliminar/{id}")
+    public String eliminarPersonaje(@PathVariable Long id, RedirectAttributes ra) {
+        if (personajeRepository.existsById(id)) {
+            personajeRepository.deleteById(id);
+            ra.addFlashAttribute("mensaje", "Personaje eliminado");
+            log.warn("Personaje {} eliminado", id);
+        } else {
+            ra.addFlashAttribute("mensaje", "Error: Personaje no encontrado");
+        }
+        return "redirect:/personajes";
+    }
+
+    // SUBIR NIVEL
+    @GetMapping("/subir-nivel/{id}")
+    public String subirNivel(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            Personaje p = personajeService.subirNivel(id);
+            ra.addFlashAttribute("mensaje", "Nivel de " + p.getNombre() + " subido correctamente");
+        } catch (Exception e) {
+            ra.addFlashAttribute("mensaje", "Error al subir nivel: " + e.getMessage());
+        }
+        return "redirect:/personajes";
+    }
+}
+```
+
+---
+
+## 4️⃣ `nuevoPersonaje.html`
+
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nuevo Personaje</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+<div class="container">
+    <h1>Crear Personaje</h1>
+
+    <form th:action="@{/personajes/crear}" th:object="${personaje}" method="post">
+
+        <div class="mb-3">
+            <label>Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Clase</label>
+            <select class="form-control" th:field="*{clase}" required>
+                <option value="Guerrero">Guerrero</option>
+                <option value="Mago">Mago</option>
+                <option value="Arquero">Arquero</option>
+                <option value="Pícaro">Pícaro</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Nivel</label>
+            <input type="number" class="form-control" th:field="*{nivel}" min="1" max="100" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Puntos de vida</label>
+            <input type="number" class="form-control" th:field="*{puntosVida}" min="0" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Puntos de maná</label>
+            <input type="number" class="form-control" th:field="*{puntosMana}" min="0" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Ciudad</label>
+            <select class="form-control" th:field="*{ciudad.id}" required>
+                <option th:each="c : ${ciudades}" th:value="${c.id}" th:text="${c.nombre}"></option>
+            </select>
+        </div>
+
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" th:field="*{estaVivo}">
+            <label>Está vivo</label>
+        </div>
+
+        <button class="btn btn-success" type="submit">Guardar</button>
+        <a class="btn btn-secondary" href="/personajes">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
+```
+
+---
+
+✅ Con estos cambios:
+
+1. El listado de personajes carga desde la base de datos (`/personajes`).
+2. El botón "Crear Personaje" va a `/personajes/nuevo`.
+3. El formulario de creación carga **todas las ciudades** desde la base de datos.
+4. Al enviar, se guarda correctamente el personaje con la ciudad seleccionada.
+5. Validaciones básicas de nombre y nivel están incluidas.
+
+---
+
+Si quieres, puedo hacer ahora también el **`listaPersonajes.html` completo** con **botones funcionales para eliminar, subir nivel y curar**, listo para copiar y pegar. Esto hará que tu CRUD quede 100% funcional.
+
+¿Quieres que haga eso?
