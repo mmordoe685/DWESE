@@ -1,2 +1,38 @@
 2025-12-06T14:37:10.944+01:00  INFO 15456 --- [mapa] [main] [                                                 ] com.calabozo.mapa.MapaApplication        : Starting MapaApplication using Java 17.0.12 with PID 15456 (C:\DWESE\Trimestre_1\Ciudades\SPRINGBOOT\calabozo\mapa\target\classes started by Marcos in C:\DWESE\Trimestre_1\Ciudades)
 2025-12-06T14:37:10.974+01:00  INFO 15456 --- [mapa] [main] [                                                 ] com.calabozo.mapa.MapaApplication        : No active profile set, falling back to 1 default profile: "default"
+2025-12-06T14:37:12.602+01:00  INFO 15456 --- [mapa] [main] [                                                 ] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-06T14:37:12.693+01:00  INFO 15456 --- [mapa] [main] [                                                 ] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 1 JPA repository interface.
+2025-12-06T14:37:13.620+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2025-12-06T14:37:13.645+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-06T14:37:13.646+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.11]
+2025-12-06T14:37:13.736+01:00  INFO 15456 --- [mapa] [main] [                                                 ] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2668 ms
+2025-12-06T14:37:14.164+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-06T14:37:14.525+01:00  INFO 15456 --- [mapa] [main] [                                                 ] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 7.1.1.Final
+2025-12-06T14:37:15.453+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-06T14:37:15.522+01:00  INFO 15456 --- [mapa] [main] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-06T14:37:16.088+01:00  INFO 15456 --- [mapa] [main] [                                                 ] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3d73cd78
+2025-12-06T14:37:16.093+01:00  INFO 15456 --- [mapa] [main] [                                                 ] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-06T14:37:16.197+01:00  WARN 15456 --- [mapa] [main] [                                                 ] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-06T14:37:16.238+01:00  INFO 15456 --- [mapa] [main] [                                                 ] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/citydungeon]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.41
+	Default catalog/schema: citydungeon/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DatasourceConnectionProviderImpl
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-06T14:37:18.007+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-06T14:37:18.145+01:00  INFO 15456 --- [mapa] [main] [                                                 ] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-06T14:37:18.287+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-06T14:37:18.695+01:00  WARN 15456 --- [mapa] [main] [                                                 ] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-06T14:37:19.573+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-12-06T14:37:19.711+01:00  INFO 15456 --- [mapa] [main] [                                                 ] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2025-12-06T14:37:19.723+01:00  INFO 15456 --- [mapa] [main] [                                                 ] com.calabozo.mapa.MapaApplication        : Started MapaApplication in 9.713 seconds (process running for 10.903)
+2025-12-06T14:37:21.903+01:00  INFO 15456 --- [mapa] [RMI TCP Connection(2)-127.0.0.1] [                                                 ] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-06T14:37:21.904+01:00  INFO 15456 --- [mapa] [RMI TCP Connection(2)-127.0.0.1] [                                                 ] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-12-06T14:37:21.905+01:00  INFO 15456 --- [mapa] [RMI TCP Connection(2)-127.0.0.1] [                                                 ] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-12-06T14:38:50.657+01:00  INFO 15456 --- [mapa] [http-nio-8080-exec-8] [                                                 ] c.c.mapa.controller.cityController       : Mostrando información de la ciudad con id 1
