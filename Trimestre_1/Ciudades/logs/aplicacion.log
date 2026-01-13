@@ -36,3 +36,4 @@
 2025-12-06T14:37:21.904+01:00  INFO 15456 --- [mapa] [RMI TCP Connection(2)-127.0.0.1] [                                                 ] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-12-06T14:37:21.905+01:00  INFO 15456 --- [mapa] [RMI TCP Connection(2)-127.0.0.1] [                                                 ] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
 2025-12-06T14:38:50.657+01:00  INFO 15456 --- [mapa] [http-nio-8080-exec-8] [                                                 ] c.c.mapa.controller.cityController       : Mostrando información de la ciudad con id 1
+2025-12-06T14:52:15.361+01:00  INFO 15456 --- [mapa] [http-nio-8080-exec-2] [                                                 ] c.c.mapa.controller.cityController       : Mostrando información de la ciudad con id 1
