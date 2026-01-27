@@ -1,6 +1,5 @@
 package com.buceo.inmersion.model;
 
-import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,65 +11,65 @@ public class Usuario {
     private Long id;
 
     private String nombre;
-    private String apellido;
-    private String correoElectronico;
-    private String contrasena;
-    private Integer rol;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Perfil perfil;
+    @Column(unique = true)
+    private String email;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<UsuarioCurso> cursos;
+    private String password;
 
-    // Getters y setters
+    private String rol; // USER, EMPRESA, ADMIN
+
+    private String biografia;
+
+    // CONSTRUCTORES
+    public Usuario() {}
+
+    // GETTERS Y SETTERS
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public String getApellido() {
-        return apellido;
+
+    public String getEmail() {
+        return email;
     }
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
-    public String getCorreoElectronico() {
-        return correoElectronico;
-    }
-    public void setCorreoElectronico(String correoElectronico) {
-        this.correoElectronico = correoElectronico;
-    }
-    public String getContrasena() {
-        return contrasena;
-    }
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-    public Integer getRol() {
-        return rol;
-    }
-    public void setRol(Integer rol) {
-        this.rol = rol;
-    }
-    public Perfil getPerfil() {
-        return perfil;
-    }
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
-    public List<UsuarioCurso> getCursos() {
-        return cursos;
-    }
-    public void setCursos(List<UsuarioCurso> cursos) {
-        this.cursos = cursos;
+
+    public String getPassword() {
+        return password;
     }
     
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+    
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public String getBiografia() {
+        return biografia;
+    }
+
+    public void setBiografia(String biografia) {
+        this.biografia = biografia;
+    }
 }
