@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-InmersionApplication<inmersion>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.buceo.inmersion.InmersionApplication",
+            "projectName": "inmersion",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
